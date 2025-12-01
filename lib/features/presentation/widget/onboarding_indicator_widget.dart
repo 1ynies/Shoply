@@ -11,6 +11,7 @@ class StepIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      
       // The indicator is a rounded rectangle or a circle
       width: isCurrent ? 30.0 : 8.0, // Wider if it is the current step (dynamic width)
       height: 8.0, 
@@ -41,7 +42,7 @@ class ProgressStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: List.generate(totalSteps, (index) {
         // Compare the current index with the dynamic currentStep value
         return StepIndicator(

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoplyapp/features/presentation/widget/onboarding_indicator_widget.dart';
 import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
+import 'package:shoplyapp/features/presentation/widget/submit_like_button.dart';
 
 class OnBoarding1 extends StatefulWidget {
   const OnBoarding1({super.key});
@@ -30,34 +31,53 @@ class _OnBoarding1State extends State<OnBoarding1> {
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
+            crossAxisAlignment: .stretch,
+            mainAxisAlignment: .spaceBetween,
             children: [
               ShoplyTextlogo(),
               Image.asset(
                 'lib/assets/images/person_pushing_another_in_a_cart.png',
               ),
-              ProgressStepper(
-                totalSteps: _totalSteps,
-                currentStep: _currentStep,
-              ),
-              Text('New fashion collection'),
-              RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                  style: GoogleFonts.manrope(
-                    textStyle: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w500,
+
+              Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Text(
+                    'New fashion collection',
+                    style: GoogleFonts.manrope(
+                      textStyle: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
-                  children: <TextSpan>[
-                    TextSpan(text: 'Shop smartly , Faster With'),
-                    TextSpan(
-                      text: 'Shoply',
-                      style: TextStyle(color: Color(0xFF9AE600)),
+                  RichText(
+                    textAlign: TextAlign.left,
+                    text: TextSpan(
+                      style: GoogleFonts.manrope(
+                        textStyle: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(text: 'Shop smartly , Faster With'),
+                        TextSpan(
+                          text: 'Shoply',
+                          style: TextStyle(color: Color(0xFF9AE600)),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  ProgressStepper(
+                    totalSteps: _totalSteps,
+                    currentStep: _currentStep,
+                  ),
+                ],
               ),
+
+              SubmitLikeButton(onPressed: () {}, title: 'Next'),
             ],
           ),
         ),

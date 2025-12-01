@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoplyapp/features/presentation/pages/on_boarding1.dart';
+import 'package:shoplyapp/features/presentation/pages/on_boarding2.dart';
 
 class ShoplySplashScreen extends StatefulWidget {
   const ShoplySplashScreen({super.key});
@@ -17,7 +18,7 @@ class Onboardingpageview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(children: [OnBoarding1()]);
+    return PageView(children: [OnBoarding1(),OnBoarding2()]);
   }
 }
 

@@ -8,7 +8,9 @@ class ShoplyTextlogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset('lib/assets/svg/app_logo.svg', width: 25,height: 30,),
           const SizedBox(width: 10),
