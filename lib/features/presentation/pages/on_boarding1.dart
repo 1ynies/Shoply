@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoplyapp/features/presentation/pages/on_boarding2.dart';
 import 'package:shoplyapp/features/presentation/widget/onboarding_indicator_widget.dart';
 import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
 import 'package:shoplyapp/features/presentation/widget/submit_like_button.dart';
@@ -31,7 +32,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: .stretch,
+            // crossAxisAlignment: .stretch,
             mainAxisAlignment: .spaceBetween,
             children: [
               ShoplyTextlogo(),
@@ -44,6 +45,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                 children: [
                   Text(
                     'New fashion collection',
+                    textAlign: TextAlign.left,
                     style: GoogleFonts.manrope(
                       textStyle: TextStyle(
                         fontSize: 24,
@@ -70,6 +72,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 30),
                   ProgressStepper(
                     totalSteps: _totalSteps,
                     currentStep: _currentStep,
@@ -77,7 +80,18 @@ class _OnBoarding1State extends State<OnBoarding1> {
                 ],
               ),
 
-              SubmitLikeButton(onPressed: () {}, title: 'Next'),
+              SubmitLikeButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const OnBoarding2(),
+
+                      
+                    ),
+                  );
+                },
+                title: 'Next',
+              ),
             ],
           ),
         ),

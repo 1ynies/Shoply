@@ -28,7 +28,7 @@ class _ShoplySplashScreenState extends State<ShoplySplashScreen> {
     super.initState();
     Timer(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => Onboardingpageview()),
+        MaterialPageRoute(builder: (context) => OnBoarding1()),
       );
     });
   }
