@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'color_schemes.dart'; // Import colors for use in styles
 
 // A helper function to create our custom TextTheme
 TextTheme buildTextTheme(TextTheme base) {
   return base.copyWith(
     // Headline for large titles (e.g., screen title, product name)
+    bodySmall: GoogleFonts.manrope(
+      textStyle: base.bodySmall?.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
     headlineLarge: base.headlineLarge?.copyWith(
       fontWeight: FontWeight.bold,
       color: primaryColor, // Using color from color_schemes
@@ -16,15 +23,9 @@ TextTheme buildTextTheme(TextTheme base) {
       fontSize: 20.0,
     ),
     // Body text for general content
-    bodyLarge: base.bodyLarge?.copyWith(
-      fontSize: 16.0,
-      color: onSurface,
-    ),
+    bodyLarge: base.bodyLarge?.copyWith(fontSize: 16.0, color: onSurface),
     // Smaller body text (e.g., product description, greyed out text)
-    bodyMedium: base.bodyMedium?.copyWith(
-      fontSize: 14.0,
-      color: hintColor,
-    ),
+    bodyMedium: base.bodyMedium?.copyWith(fontSize: 14.0, color: hintColor),
     // Button text
     labelLarge: base.labelLarge?.copyWith(
       fontWeight: FontWeight.w600,
