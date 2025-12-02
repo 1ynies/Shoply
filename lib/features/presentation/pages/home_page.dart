@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoplyapp/features/domain/entities/Category.dart';
+import 'package:shoplyapp/features/domain/entities/Product.dart';
 import 'package:shoplyapp/features/presentation/widget/buttom_navbar.dart';
 import 'package:shoplyapp/features/presentation/widget/category_chip.dart';
 import 'package:shoplyapp/features/presentation/widget/green_round_button.dart';
+import 'package:shoplyapp/features/presentation/widget/product_card.dart';
 import 'package:shoplyapp/features/presentation/widget/round_navigation_button.dart';
 import 'package:shoplyapp/features/presentation/widget/search_field.dart';
 import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
@@ -18,6 +20,27 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _selectedCategoryId = 'all';
 
+  
+
+  List<Product> get _filteredProducts {
+    if (_selectedCategoryId == 'all') {
+      // ➡️ CHANGED: Accessed the now-public static list Product.products
+      return Product.products; 
+    }
+    
+    // NOTE: For simplicity, this filter checks if the product name contains the category ID.
+    // In a production app, the Product model should have a dedicated 'categoryId' field.
+    // ➡️ CHANGED: Accessed the now-public static list Product.products
+    return Product.products.where((product) {
+      return product.name.toLowerCase().contains(_selectedCategoryId.replaceAll('-', ' '));
+    }).toList();
+  } 
+
+
+
+
+  
+  
   void _handleCategorySelected(String categoryId) {
     setState(() {
       _selectedCategoryId = categoryId;
@@ -28,6 +51,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredProducts = _filteredProducts;
+    
+    // Calculate the height required for the GridView based on the number of filtered items.
+    // Each row has 2 items. We assume a card height of approx 300px + 12px spacing.
+    final double gridHeight = (filteredProducts.length / 2).ceil() * (300.0 + 12.0);
     return Scaffold(
       bottomNavigationBar: ButtomNavbar(),
       body: SafeArea(
@@ -45,6 +73,29 @@ class _HomePageState extends State<HomePage> {
                 _adCard(),
                 const SizedBox(height: 16),
                 _categoriesList(),
+                
+
+                SizedBox(
+                  // Set explicit height to allow GridView inside SingleChildScrollView
+                  height: gridHeight, 
+                  child: GridView.builder(
+                    // FIX: Must prevent GridView from scrolling independently
+                    physics: const NeverScrollableScrollPhysics(), 
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // ⭐️ TWO ITEMS PER ROW
+                      crossAxisSpacing: 12.0, // Horizontal spacing
+                      mainAxisSpacing: 12.0, // Vertical spacing
+                      childAspectRatio: 0.75, // Adjust this ratio for card dimensions
+                    ),
+                    itemCount: filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = filteredProducts[index];
+                      // Pass the product data to the card
+                      return ProductCard(product: product); 
+                    },
+                  ),
+                ),
+
               ],
             ),
           ),
