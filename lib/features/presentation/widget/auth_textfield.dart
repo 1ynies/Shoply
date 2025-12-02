@@ -16,6 +16,7 @@ class AuthTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70,
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
         maxLines: 1,
         cursorColor: Colors.black87,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoplyapp/features/presentation/pages/register_page.dart';
 import 'package:shoplyapp/features/presentation/widget/Sign_in_with_google_button.dart';
 import 'package:shoplyapp/features/presentation/widget/auth_password_textfield.dart';
 import 'package:shoplyapp/features/presentation/widget/auth_textfield.dart';
@@ -24,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Padding(
             padding: .all(16),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ShoplyTextlogo(),
                 Text(
@@ -44,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   crossAxisAlignment: .start,
                   children: [
-                    Text('Email'),
+                    Text('Email', style: Theme.of(context).textTheme.bodySmall),
                     AuthTextfield(
                       label: 'Enter your email',
                       prefixicon: 'lib/assets/svg/envelope.svg',
@@ -54,7 +56,10 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   crossAxisAlignment: .start,
                   children: [
-                    Text('Password'),
+                    Text(
+                      'Password',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     AuthTextfieldPassword(
                       label: 'Enter password',
                       prefixIcon: 'lib/assets/svg/lock_closed.svg',
@@ -68,8 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                         Checkbox(
                           value: isChecked,
                           onChanged: (bool? newValue) {
-                            isChecked =
-                                newValue!; 
+                            isChecked = newValue!;
                           },
                           activeColor: Color(0xFF9AE600),
                           checkColor: Colors.white,
@@ -108,62 +112,75 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                Row(
+                const SizedBox(height: 20,),
+                Column(
                   children: [
-                    const Expanded(
-                      child: Divider(
-                        color: Colors.grey,
-                        thickness: 1.0,
-                        endIndent: 10.0, // Adds space before the text
-                      ),
-                    ),
-                    const Text(
-                      "Or Sign in with",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14.0,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        color: Colors.grey,
-                        thickness: 1.0,
-                        indent: 10.0, // Adds space after the text
-                      ),
-                    ),
-                  ],
-                ),
-          
-                Row(
-                  children: [
-                    Expanded(child: GoogleSignInButton(onPressed: () {})),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: .center,
-                  children: [
-                    Text(
-                      'Don\'t have account ? ',
-                      style: GoogleFonts.manrope(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        'Register',
-                        style: GoogleFonts.manrope(
-                          textStyle: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Color(0xFF9AE600),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Divider(
+                            color: Colors.grey,
+                            thickness: 1.0,
+                            endIndent: 10.0, // Adds space before the text
                           ),
                         ),
-                      ),
+                        const Text(
+                          "Or Sign in with",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                        const Expanded(
+                          child: Divider(
+                            color: Colors.grey,
+                            thickness: 1.0,
+                            indent: 10.0, // Adds space after the text
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10,),
+                    Row(
+
+                      children: [
+                        Expanded(child: GoogleSignInButton(onPressed: () {})),
+                      ],
+                    ),
+                    const SizedBox(height: 10,),
+                    Row(
+                      mainAxisAlignment: .center,
+                      children: [
+                        Text(
+                          'Don\'t have account ? ',
+                          style: GoogleFonts.manrope(
+                            textStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Register',
+                            style: GoogleFonts.manrope(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Color(0xFF9AE600),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoplyapp/features/presentation/pages/login_page.dart';
+import 'package:shoplyapp/features/presentation/pages/register_page.dart';
 import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
 import 'package:shoplyapp/features/presentation/widget/submit_like_button.dart';
 
@@ -33,11 +35,29 @@ class WelcomePage extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: SubmitLikeButton(onPressed: () {}, title: 'Sign in'),
+                    child: SubmitLikeButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
+                      title: 'Sign in',
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: SubmitLikeButtonwhite(onPressed: () {}, title: 'Sign up'),
+                    child: SubmitLikeButtonwhite(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        );
+                      },
+                      title: 'Sign up',
+                    ),
                   ),
                 ],
               ),

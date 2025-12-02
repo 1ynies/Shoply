@@ -39,6 +39,7 @@ dependencies:
   bloc: ^9.1.0
   flutter_bloc: ^9.1.1
   flutter_native_splash: ^2.4.7
+  animated_bottom_navigation_bar: ^1.4.0
 
 dev_dependencies:
   flutter_test:

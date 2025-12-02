@@ -1,33 +1,31 @@
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
-class RoundNavigationButton extends StatelessWidget {
+class GreenRoundButton extends StatelessWidget {
   final String Iconpath;
   final double iconwidth;
   final double iconheight;
 
-  const RoundNavigationButton({
+  const GreenRoundButton({
     super.key,
     required this.Iconpath,
     required this.iconwidth,
     required this.iconheight,
   });
-
   @override
   Widget build(BuildContext context) {
-    const Color borderColor = Colors.black;
-    const double borderWidth = 1;
+  
 
     return Container(
       width: 55,
       height: 55,
       decoration: BoxDecoration(
-        color: Color(0x00000000),
+        color: Color(0xFF9AE600),
         shape: BoxShape.circle,
-        border: Border.all(color: borderColor, width: borderWidth),
       ),
-
+      // 2. Place the icon inside the container
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(5),
@@ -41,3 +39,8 @@ class RoundNavigationButton extends StatelessWidget {
     );
   }
 }
+
+
+
+  
+

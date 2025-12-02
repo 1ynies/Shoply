@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoplyapp/features/presentation/pages/login_page.dart';
+import 'package:shoplyapp/features/presentation/pages/home_page.dart';
 import 'package:shoplyapp/features/presentation/pages/splash_screen.dart';
 
 void main() {
@@ -11,6 +11,6 @@ class MyApp extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home:  LoginPage());
+    return MaterialApp(home:  HomePage());
   }
 }
