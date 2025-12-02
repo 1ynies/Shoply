@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoplyapp/features/presentation/pages/on_boarding2.dart';
 import 'package:shoplyapp/features/presentation/widget/onboarding_indicator_widget.dart';
@@ -80,17 +79,25 @@ class _OnBoarding1State extends State<OnBoarding1> {
                 ],
               ),
 
-              SubmitLikeButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const OnBoarding2(),
-
-                      
+              Row(
+                children: [
+                  Expanded(
+                    child: 
+                    
+                    SubmitLikeButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const OnBoarding2(),
+                    
+                            
+                          ),
+                        );
+                      },
+                      title: 'Next',
                     ),
-                  );
-                },
-                title: 'Next',
+                  ),
+                ],
               ),
             ],
           ),
