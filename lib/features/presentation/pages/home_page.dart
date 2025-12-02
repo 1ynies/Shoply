@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shoplyapp/features/domain/entities/Category.dart';
 import 'package:shoplyapp/features/presentation/widget/buttom_navbar.dart';
+import 'package:shoplyapp/features/presentation/widget/category_chip.dart';
 import 'package:shoplyapp/features/presentation/widget/green_round_button.dart';
 import 'package:shoplyapp/features/presentation/widget/round_navigation_button.dart';
 import 'package:shoplyapp/features/presentation/widget/search_field.dart';
 import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String _selectedCategoryId = 'all';
+
+  void _handleCategorySelected(String categoryId) {
+    setState(() {
+      _selectedCategoryId = categoryId;
+      // In a real application, this would trigger data fetching/UI update for products
+      print('Selected Category: $_selectedCategoryId');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +36,15 @@ class HomePage extends StatelessWidget {
             padding: .all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: .start,
               children: [
                 _topPart(),
                 const SizedBox(height: 16),
                 _searchSection(),
                 const SizedBox(height: 16),
-
                 _adCard(),
+                const SizedBox(height: 16),
+                _categoriesList(),
               ],
             ),
           ),
@@ -35,7 +53,30 @@ class HomePage extends StatelessWidget {
     );
   }
 
-// -- this is the ad space -- 
+  SizedBox _categoriesList() {
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: mockCategories.length,
+        itemBuilder: (context, index) {
+          final category = mockCategories[index];
+          final isSelected = category.id == _selectedCategoryId;
+
+          return Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: CategoryChip(
+              category: category,
+              isSelected: isSelected,
+              onSelected: _handleCategorySelected,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // -- this is the ad space --
   Container _adCard() {
     return Container(
       width: 100,
