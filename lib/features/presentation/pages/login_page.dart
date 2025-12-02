@@ -1,0 +1,177 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shoplyapp/features/presentation/widget/Sign_in_with_google_button.dart';
+import 'package:shoplyapp/features/presentation/widget/auth_password_textfield.dart';
+import 'package:shoplyapp/features/presentation/widget/auth_textfield.dart';
+import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
+import 'package:shoplyapp/features/presentation/widget/submit_like_button.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: .all(16),
+            child: Column(
+              children: [
+                ShoplyTextlogo(),
+                Text(
+                  'Hi ! Welcome back',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Text(
+                  'Sign in to your account',
+                  style: GoogleFonts.manrope(
+                    textStyle: TextStyle(fontWeight: FontWeight.w300),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text('Email'),
+                    AuthTextfield(
+                      label: 'Enter your email',
+                      prefixicon: 'lib/assets/svg/envelope.svg',
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Text('Password'),
+                    AuthTextfieldPassword(
+                      label: 'Enter password',
+                      prefixIcon: 'lib/assets/svg/lock_closed.svg',
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: isChecked,
+                          onChanged: (bool? newValue) {
+                            isChecked =
+                                newValue!; 
+                          },
+                          activeColor: Color(0xFF9AE600),
+                          checkColor: Colors.white,
+                          splashRadius: 20,
+                        ),
+                        Text(
+                          'Remember me',
+                          style: GoogleFonts.manrope(
+                            textStyle: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    InkWell(
+                      onTap: () {},
+                      child: Text(
+                        'Forgot password ?',
+                        style: GoogleFonts.manrope(
+                          textStyle: TextStyle(
+                            color: Color(0xFF9AE600),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SubmitLikeButton(onPressed: () {}, title: 'Login'),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                        thickness: 1.0,
+                        endIndent: 10.0, // Adds space before the text
+                      ),
+                    ),
+                    const Text(
+                      "Or Sign in with",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                    const Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                        thickness: 1.0,
+                        indent: 10.0, // Adds space after the text
+                      ),
+                    ),
+                  ],
+                ),
+          
+                Row(
+                  children: [
+                    Expanded(child: GoogleSignInButton(onPressed: () {})),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: .center,
+                  children: [
+                    Text(
+                      'Don\'t have account ? ',
+                      style: GoogleFonts.manrope(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Text(
+                        'Register',
+                        style: GoogleFonts.manrope(
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Color(0xFF9AE600),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

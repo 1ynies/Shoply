@@ -16,13 +16,13 @@ class _OnBoarding1State extends State<OnBoarding1> {
   int _currentStep = 0; // Starts at 0
   final int _totalSteps = 2; // Total number of steps
 
-  void _nextStep() {
-    setState(() {
-      if (_currentStep < _totalSteps - 1) {
-        _currentStep++;
-      }
-    });
-  }
+  // void _nextStep() {
+  //   setState(() {
+  //     if (_currentStep < _totalSteps - 1) {
+  //       _currentStep++;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoplyapp/features/presentation/pages/login_page.dart';
 import 'package:shoplyapp/features/presentation/pages/splash_screen.dart';
 
 void main() {
@@ -10,6 +11,6 @@ class MyApp extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: const ShoplySplashScreen());
+    return MaterialApp(home:  LoginPage());
   }
 }
