@@ -83,8 +83,8 @@ class _HomePageState extends State<HomePage> {
                     physics: const NeverScrollableScrollPhysics(), 
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // ⭐️ TWO ITEMS PER ROW
-                      crossAxisSpacing: 12.0, // Horizontal spacing
-                      mainAxisSpacing: 12.0, // Vertical spacing
+                      crossAxisSpacing: 8.0, // Horizontal spacing
+                      mainAxisSpacing: 8.0, // Vertical spacing
                       childAspectRatio: 0.75, // Adjust this ratio for card dimensions
                     ),
                     itemCount: filteredProducts.length,

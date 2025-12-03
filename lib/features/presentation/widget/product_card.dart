@@ -6,7 +6,6 @@ class ProductCard extends StatelessWidget {
   const ProductCard({super.key, required this.product});
   @override
   Widget build(BuildContext context) {
-    // This is the card structure designed to match the image provided by the user.
     return Card(
       // elevation: 4.0,
       shape: RoundedRectangleBorder(
