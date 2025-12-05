@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shoplyapp/features/presentation/pages/welcome_page.dart';
+import 'package:shoplyapp/features/presentation/pages/OnBoarding%20pages/welcome_page.dart';
 import 'package:shoplyapp/features/presentation/widget/onboarding_indicator_widget.dart';
 import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
 import 'package:shoplyapp/features/presentation/widget/submit_like_button.dart';
 import 'package:flutter/services.dart';
 
+// -- The StatefulWidget is used to hold and potentially modify the local state variables, like _currentStep , that determine the progress indicator's appearance. --
 class OnBoarding2 extends StatefulWidget {
   const OnBoarding2({super.key});
 
@@ -14,16 +15,8 @@ class OnBoarding2 extends StatefulWidget {
 }
 
 class _OnBoarding1State extends State<OnBoarding2> {
-  int _currentStep = 1; 
-  final int _totalSteps = 2; 
-
-  // void _nextStep() {
-  //   setState(() {
-  //     if (_currentStep < _totalSteps - 1) {
-  //       _currentStep++;
-  //     }
-  //   });
-  // }
+  final int _currentStep = 1; // Starts at 1
+  final int _totalSteps = 2; // Total number of steps
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +25,10 @@ class _OnBoarding1State extends State<OnBoarding2> {
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
-            // crossAxisAlignment: .stretch,
+            // -- to Align the widget so they will take all the space available and leave equal spaces between them  --
             mainAxisAlignment: .spaceBetween,
             children: [
+              // -- pre-made widget --
               ShoplyTextlogo(),
               Image.asset('lib/assets/images/girl_opening_package.png'),
 
@@ -62,6 +56,7 @@ class _OnBoarding1State extends State<OnBoarding2> {
                     ),
                   ),
                   const SizedBox(height: 30),
+                  // -- This code instantiates the ProgressStepper widget, which visually represents the user's current position within the multi-step onboarding process, using the local state variables _totalSteps (total indicators needed) and _currentStep (which indicator is currently active). --
                   ProgressStepper(
                     currentStep: _currentStep,
                     totalSteps: _totalSteps,
@@ -69,12 +64,15 @@ class _OnBoarding1State extends State<OnBoarding2> {
                 ],
               ),
 
+              // -- this is the next button , put inside the row then expanded because the SubmitLikeButton have no width and i had to make it take all the width available horizentally --
               Row(
                 children: [
                   Expanded(
                     child: SubmitLikeButton(
                       onPressed: () {
+                        // -- This line gives the user some feedback with slight vibration  --
                         HapticFeedback.lightImpact();
+                        // -- Navigation to WelcomePage --
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => const WelcomePage(),

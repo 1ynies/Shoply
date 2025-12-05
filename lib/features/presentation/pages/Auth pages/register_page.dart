@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shoplyapp/features/presentation/pages/login_page.dart';
+import 'package:shoplyapp/features/presentation/pages/Auth%20pages/login_page.dart';
 import 'package:shoplyapp/features/presentation/widget/Sign_in_with_google_button.dart';
 import 'package:shoplyapp/features/presentation/widget/auth_password_textfield.dart';
 import 'package:shoplyapp/features/presentation/widget/auth_textfield.dart';

@@ -27,12 +27,10 @@ const ColorScheme lightColorScheme = ColorScheme(
   secondary: secondaryColor,
   secondaryContainer: secondaryDark,
   surface: surfaceColor,
-  background: scaffoldBackground,
   error: errorColor,
   onPrimary: onPrimary,
   onSecondary: onSecondary,
   onSurface: onSurface,
-  onBackground: onSurface,
   onError: onPrimary,
   brightness: Brightness.light,
 );

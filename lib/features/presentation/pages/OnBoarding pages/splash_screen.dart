@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shoplyapp/features/presentation/pages/on_boarding1.dart';
-import 'package:shoplyapp/features/presentation/pages/on_boarding2.dart';
+import 'package:shoplyapp/features/presentation/pages/OnBoarding%20pages/on_boarding1.dart';
+import 'package:shoplyapp/features/presentation/pages/OnBoarding%20pages/on_boarding2.dart';
 
 // -- The ShoplySplashScreen needs to perform an action after a specific duration (2 seconds), which is the navigation to the onboarding screen. This behavior requires lifecycle management, which is only available in a StatefulWidget --
 

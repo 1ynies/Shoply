@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shoplyapp/features/presentation/pages/login_page.dart';
-import 'package:shoplyapp/features/presentation/pages/register_page.dart';
+import 'package:shoplyapp/features/presentation/pages/Auth%20pages/login_page.dart';
+import 'package:shoplyapp/features/presentation/pages/Auth%20pages/register_page.dart';
 import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
 import 'package:shoplyapp/features/presentation/widget/submit_like_button.dart';
 
