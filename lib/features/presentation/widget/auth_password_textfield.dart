@@ -104,8 +104,8 @@ class _AuthTextfieldPasswordState extends State<AuthTextfieldPassword> {
               Radius.circular(20),
             ),
             borderSide: BorderSide(
-              color: Colors.indigo,
-              width: 2,
+              color: Colors.black87,
+              width: 1,
             ),
           ),
           

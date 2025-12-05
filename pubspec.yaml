@@ -38,7 +38,7 @@ dependencies:
   google_fonts: ^6.3.2
   bloc: ^9.1.0
   flutter_bloc: ^9.1.1
-  flutter_native_splash: ^2.4.7
+  
   animated_bottom_navigation_bar: ^1.4.0
   
 
@@ -53,6 +53,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   flutter_launcher_icons: "^0.13.1"
+  flutter_native_splash: ^2.4.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -94,20 +95,21 @@ flutter:
   #         weight: 700
 flutter_native_splash:
   # The color of the splash screen background (your lime green)
-  color: "#C7F084"
+  color: "#BBF451"
   # The path to your app's logo image
-  image: "assets/images/splash_logo.png"
+  image: "lib/assets/images/app_logo_backgroundless.png"
 
   # Optional: Configure branding text (the "Shop smarter" tagline)
   # This section requires some text/image setup in the native files,
   # but you can use branding to center the logo higher.
-  branding: "assets/images/splash_branding.png" # You could create an image with the "Shoply" and "Shop smarter" text together.
+  # branding: "Shop smarter"
+   # You could create an image with the "Shoply" and "Shop smarter" text together.
   # OR use a simple branding text:
   # branding: "Shop smarter"
 
   # Optional: Configuration for Android 12 and above (new splash screen API)
   android_12:
-    image: "assets/images/android12_splash.png"
+    image: "lib/assets/images/app_logo_backgroundless.png"
     # Ensure this image only contains the icon, as Android 12 handles the background color automatically.
 
   # Optional: Configure for iOS

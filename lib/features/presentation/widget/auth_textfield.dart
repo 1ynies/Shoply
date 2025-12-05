@@ -29,12 +29,17 @@ class AuthTextfield extends StatelessWidget {
             padding: .all(10),
             child: SvgPicture.asset(prefixicon, width: 10, height: 10),
           ),
-          floatingLabelStyle: const TextStyle(
-            color: Colors.black87,
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold,
+          floatingLabelStyle: GoogleFonts.manrope(
+            textStyle: const TextStyle(
+              color: Colors.black87,
+              fontSize: 14.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
             borderSide: BorderSide(
               color: Colors.black87,
               width: 1,

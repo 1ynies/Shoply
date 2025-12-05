@@ -6,6 +6,7 @@ import 'package:shoplyapp/features/presentation/widget/auth_password_textfield.d
 import 'package:shoplyapp/features/presentation/widget/auth_textfield.dart';
 import 'package:shoplyapp/features/presentation/widget/shoply_text&logo.dart';
 import 'package:shoplyapp/features/presentation/widget/submit_like_button.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -108,11 +109,20 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   children: [
                     Expanded(
-                      child: SubmitLikeButton(onPressed: () {}, title: 'Login'),
+                      child: SubmitLikeButton(
+                        onPressed: () {
+                          // Trigger a medium impact haptic effect
+                          HapticFeedback.mediumImpact();
+
+                          // Add your button's main logic here
+                          // print('Button Pressed');
+                        },
+                        title: 'Login',
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 20),
                 Column(
                   children: [
                     Row(
@@ -141,14 +151,19 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(height: 10),
                     Row(
-
                       children: [
-                        Expanded(child: GoogleSignInButton(onPressed: () {})),
+                        Expanded(
+                          child: GoogleSignInButton(
+                            onPressed: () {
+                              HapticFeedback.mediumImpact();
+                            },
+                          ),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: .center,
                       children: [
