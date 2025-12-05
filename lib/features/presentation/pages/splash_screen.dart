@@ -1,10 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoplyapp/features/presentation/pages/on_boarding1.dart';
 import 'package:shoplyapp/features/presentation/pages/on_boarding2.dart';
+
+// -- The ShoplySplashScreen needs to perform an action after a specific duration (2 seconds), which is the navigation to the onboarding screen. This behavior requires lifecycle management, which is only available in a StatefulWidget --
 
 class ShoplySplashScreen extends StatefulWidget {
   const ShoplySplashScreen({super.key});
@@ -18,7 +19,7 @@ class Onboardingpageview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(children: [OnBoarding1(),OnBoarding2()]);
+    return PageView(children: [OnBoarding1(), OnBoarding2()]);
   }
 }
 
@@ -26,10 +27,11 @@ class _ShoplySplashScreenState extends State<ShoplySplashScreen> {
   @override
   void initState() {
     super.initState();
+    // -- This code snippet make sure that after 2 seconds , the navigation to OnBoarding1 screen will happen
     Timer(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => OnBoarding1()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (context) => OnBoarding1()));
     });
   }
 
@@ -46,16 +48,19 @@ class _ShoplySplashScreenState extends State<ShoplySplashScreen> {
             end: Alignment.bottomCenter,
           ),
         ),
+
+        // -- This is the main content of the splash screen --
         child: Center(
-          // Use a Column to stack the logo, text, and loading indicator vertically.
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              // -- Tha logo --
               SvgPicture.asset(
                 'lib/assets/svg/app_logo.svg',
                 width: 70,
                 height: 88,
               ),
+              // -- The text --
               Text(
                 'Shoply',
                 style: GoogleFonts.manrope(
@@ -76,17 +81,19 @@ class _ShoplySplashScreenState extends State<ShoplySplashScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              // -- SizedBox to insure the spacing between the logo&text and the circular progress indicator --
+              const SizedBox(height: 200),
 
-              // Add some spacing between the text and the loading indicator
-              const SizedBox(height: 300),
-
-              // --- 3. The Loading Indicator ---
-              // A simple circular progress indicator.
+              // -- The Loading Indicator : A simple circular progress indicator--
               const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Color(0xFF222B08),
-                ), // Dark green color
-                strokeWidth: 3.0,
+                //  The color of the filled-in progress arc
+                color: Color(0xFF192E03),
+
+                //  The color of the unfilled track/background ring
+                backgroundColor: Color(0xFFF7FEE7),
+
+                // Optional: Set the thickness
+                strokeWidth: 4.0,
               ),
             ],
           ),
