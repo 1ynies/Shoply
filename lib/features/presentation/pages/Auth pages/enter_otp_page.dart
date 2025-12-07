@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoplyapp/features/presentation/widget/round_circle%20_with_lock_inside.dart';
 import 'package:shoplyapp/features/presentation/widget/round_navigation_button.dart';
@@ -47,7 +46,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
           mainAxisAlignment: .spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left : 16,top: 16),
               child: Row(
                 mainAxisAlignment: .start,
                 children: [
@@ -59,7 +58,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                 ],
               ),
             ),
-            Column(
+            Column (
               children: [
                 Center(
                   child: Column(
@@ -70,7 +69,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
                         'Check your email inbox',
                         style: GoogleFonts.manrope(
                           textStyle: const TextStyle(
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             fontSize: 20,
                           ),
                         ),
@@ -222,7 +221,7 @@ class _EnterOtpPageState extends State<EnterOtpPage> {
         borderRadius: BorderRadius.circular(25.0),
         border: Border.all(
           color: const Color(0xFF000000), // The color of the border
-          width: 1.0, // The desired border width
+          width: 0.5, // The desired border width
         ),
       ),
 

@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RoundCircleWithLockInside extends StatelessWidget {
+  const RoundCircleWithLockInside({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

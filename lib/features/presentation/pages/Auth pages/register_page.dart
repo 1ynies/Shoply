@@ -51,6 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     AuthTextfield(
+                      autofocus: false,
                       label: 'Enter your fullname',
                       prefixicon: 'lib/assets/svg/user_outline.svg',
                     ),
@@ -61,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     Text('Email', style: Theme.of(context).textTheme.bodySmall),
                     AuthTextfield(
+                      autofocus: false,
                       label: 'Enter your email',
                       prefixicon: 'lib/assets/svg/envelope.svg',
                     ),

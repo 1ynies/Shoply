@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text('Email', style: Theme.of(context).textTheme.bodySmall),
                     AuthTextfield(
+                      autofocus: false,
                       label: 'Enter your email',
                       prefixicon: 'lib/assets/svg/envelope.svg',
                     ),
