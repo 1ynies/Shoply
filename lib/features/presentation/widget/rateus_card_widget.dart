@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shoplyapp/features/presentation/widget/submit_like_button.dart';
 
 class RateusCardWidget extends StatefulWidget {
+  const RateusCardWidget({super.key});
+
   @override
   State<RateusCardWidget> createState() => _RateusCardWidgetState();
 }
@@ -18,18 +19,18 @@ class _RateusCardWidgetState extends State<RateusCardWidget> {
 
     return SvgPicture.asset(
       'lib/assets/svg/star_outline.svg',
-      color: Colors.grey.shade400,
       width: 36,
       height: 36,
     );
-
-    
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(50.0),
+      width: 200,
+      height: 320,
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(15.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -51,14 +52,14 @@ class _RateusCardWidgetState extends State<RateusCardWidget> {
               color: Colors.black,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           // 3. Prompt Text
           const Text(
             'How about giving us a rate',
             style: TextStyle(fontSize: 16, color: Colors.black54),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 8),
           // 4. Static Rating Stars (Row is NOT clickable)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -66,20 +67,23 @@ class _RateusCardWidgetState extends State<RateusCardWidget> {
             children: List.generate(5, (index) => _buildStaticStar(index + 1)),
           ),
           // Spacer
-          const SizedBox(height: 30),
+          const SizedBox(height: 16),
+
           // Spacer
-          
-          Row(
-            children: [
-              Expanded(
-                child: SubmitLikeButton(
-                  onPressed: () {
-                    //TODO: OPEN AN OUTSIDE LINK IN HERE
-                  },
-                  title: 'Rate us',
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SubmitLikeButton(
+                    onPressed: () {
+                      //TODO: OPEN AN OUTSIDE LINK IN HERE
+                    },
+                    title: 'Rate us',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 16),
           // 6. "No, thank you" Link

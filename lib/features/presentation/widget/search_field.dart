@@ -13,7 +13,7 @@ class _SearchFieldState extends State<SearchField> {
   late FocusNode _myFocusNode;
   bool _isFocused = false;
 
-  late TextEditingController _textController = TextEditingController();
+  late final TextEditingController _textController = TextEditingController();
 
   @override
   void initState() {

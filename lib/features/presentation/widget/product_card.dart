@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shoplyapp/features/domain/entities/Product.dart';
+import 'package:shoplyapp/features/domain/entities/Product_entity.dart';
 
 class ProductCard extends StatelessWidget {
-  final Product product;
+  final ProductEntity product;
   const ProductCard({super.key, required this.product});
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class ProductCard extends StatelessWidget {
               children: <Widget>[
                 // Price
                 Text(
-                  '\$${product.price}',
+                  '\$${product.basePrice}',
                   style: const TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,

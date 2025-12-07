@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart'; 
 
 class ButtomNavbar extends StatefulWidget {
+  const ButtomNavbar({super.key});
+
   @override
   _ButtomNavbarState createState() => _ButtomNavbarState();
 }

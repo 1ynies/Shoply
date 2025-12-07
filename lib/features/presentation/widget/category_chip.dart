@@ -22,7 +22,7 @@ class CategoryChip extends StatelessWidget {
     final Color textColor = isSelected ? Colors.white : Colors.black87;
 
     return GestureDetector(
-      onTap: () => onSelected(category.id),
+      onTap: () => onSelected(category.categoryID),
       child: Container(
         // Set fixed dimensions similar to the image
         constraints: const BoxConstraints(minWidth: 50),

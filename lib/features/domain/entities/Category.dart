@@ -1,19 +1,23 @@
 
+
+
 class Category {
-  final String id;
+  final String categoryID;
   final String name;
+  
 
-  Category({required this.id, required this.name});
-}
-
-// 2. Mock Data
-// In a real app, this data would come from an API or database.
-final List<Category> mockCategories = [
-  Category(id: 'all', name: 'All'),
-  Category(id: 'tshirt', name: 'T-Shirt'),
-  Category(id: 'jacket', name: 'Jacket'),
-  Category(id: 'shoes', name: 'Shoes'),
-  Category(id: 'jeans', name: 'Jeans'),
-  Category(id: 'hats', name: 'Hats'),
-  Category(id: 'accessories', name: 'Accessories'),
+  Category({
+    required this.categoryID,
+    required this.name,
+    
+  });
+  
+  static List<Category> mockCategories = [
+  Category(categoryID: 'all', name: 'All'),
+  Category(categoryID: 'CAT01', name: 'Electronics'),
+  Category(categoryID: 'CAT02', name: 'Household'),
+  Category(categoryID: 'CAT03', name: 'Apparel'),
+  Category(categoryID: 'CAT04', name: 'Furniture'),
+  
 ];
+}
