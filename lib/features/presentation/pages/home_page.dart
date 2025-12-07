@@ -23,12 +23,9 @@ class _HomePageState extends State<HomePage> {
 
   List<ProductEntity> get _filteredProducts {
     if (_selectedCategoryId == 'all') {
-      // ➡️ CHANGED: Accessed the now-public static list Product.products
       return ProductEntity.mockProducts;
     }
 
-    // NOTE: For simplicity, this filter checks if the product name contains the category ID.
-    // In a production app, the Product model should have a dedicated 'categoryId' field.
     return ProductEntity.mockProducts.where((product) {
       return product.name.toLowerCase().contains(
         _selectedCategoryId.replaceAll('-', ' '),
@@ -39,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   void _handleCategorySelected(String categoryId) {
     setState(() {
       _selectedCategoryId = categoryId;
-      // In a real application, this would trigger data fetching/UI update for products
+
       print('Selected Category: $_selectedCategoryId');
     });
   }
@@ -70,28 +67,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 16),
                 _categoriesList(),
 
-                SizedBox(
-                  // Set explicit height to allow GridView inside SingleChildScrollView
-                  height: gridHeight,
-                  child: GridView.builder(
-                    // FIX: Must prevent GridView from scrolling independently
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // ⭐️ TWO ITEMS PER ROW
-                          crossAxisSpacing: 8.0, // Horizontal spacing
-                          mainAxisSpacing: 8.0, // Vertical spacing
-                          childAspectRatio:
-                              0.75, // Adjust this ratio for card dimensions
-                        ),
-                    itemCount: filteredProducts.length,
-                    itemBuilder: (context, index) {
-                      final product = filteredProducts[index];
-                      // Pass the product data to the card
-                      return ProductCard(product: product);
-                    },
-                  ),
-                ),
+                _products(gridHeight, filteredProducts),
               ],
             ),
           ),
@@ -100,6 +76,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // -- TODO:  FIX THE PRODUCT CARD WIDGET , TO LOOK LIKE THE UI DESIGN --
+  SizedBox _products(double gridHeight, List<ProductEntity> filteredProducts) {
+    return SizedBox(
+      // Set explicit height to allow GridView inside SingleChildScrollView
+      height: gridHeight,
+      child: GridView.builder(
+        // FIX: Must prevent GridView from scrolling independently
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // ⭐️ TWO ITEMS PER ROW
+          crossAxisSpacing: 8.0, // Horizontal spacing
+          mainAxisSpacing: 8.0, // Vertical spacing
+          // childAspectRatio: 0.75, // Adjust this ratio for card dimensions
+        ),
+        itemCount: filteredProducts.length,
+        itemBuilder: (context, index) {
+          final product = filteredProducts[index];
+          // Pass the product data to the card
+          return Expanded(child: ProductCard(product: product));
+        },
+      ),
+    );
+  }
+
+  // -- this is the scrollable  horizental category list --
   SizedBox _categoriesList() {
     return SizedBox(
       height: 40,
@@ -195,6 +196,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // -- this is the search part , the search field and filter button  --
   Row _searchSection() {
     return Row(
       crossAxisAlignment: .center,
