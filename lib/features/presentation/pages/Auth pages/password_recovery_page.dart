@@ -12,8 +12,7 @@ class PasswordRecoveryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // body: SingleChildScrollView(
-      // child:
+
       body: SafeArea(
         child: Column(
           mainAxisAlignment: .spaceBetween,
@@ -70,7 +69,7 @@ class PasswordRecoveryPage extends StatelessWidget {
                 ),
               ],
             ),
-            // const SizedBox(height: 100),
+
             const Spacer(),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -88,7 +87,6 @@ class PasswordRecoveryPage extends StatelessWidget {
           ],
         ),
       ),
-      // ),
     );
   }
 }
