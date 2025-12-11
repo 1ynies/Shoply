@@ -6,6 +6,9 @@ class CartItemModel extends CartItemEntity {
     required super.variantID,
     required super.quantity,
     required super.unitPrice,
+    required super.name,
+    required super.size,
+    required super.image,
   });
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) {
@@ -14,6 +17,9 @@ class CartItemModel extends CartItemEntity {
       variantID: json['variantID'] as String,
       quantity: json['quantity'] as int,
       unitPrice: (json['unitPrice'] as num).toDouble(),
+      name: json['name'] as String? ?? '',
+      size: json['size'] as String? ?? '',
+      image: json['image'] as String? ?? '',
     );
   }
 
@@ -23,6 +29,9 @@ class CartItemModel extends CartItemEntity {
       'variantID': variantID,
       'quantity': quantity,
       'unitPrice': unitPrice,
+      'name': name,
+      'size': size,
+      'image': image,
     };
   }
 }

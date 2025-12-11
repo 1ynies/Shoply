@@ -3,12 +3,19 @@ class CartItemEntity {
   final String variantID;
   final int quantity;
   final double unitPrice;
+  final String name;
+  final String size;
+  final String image;
+
 
   CartItemEntity({
     required this.productID,
     required this.variantID,
     required this.quantity,
     required this.unitPrice,
+    required this.name,
+    required this.size,
+    required this.image,
   });
 }
 
