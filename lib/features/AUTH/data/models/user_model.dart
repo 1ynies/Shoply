@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../domain/entities/user_entity.dart';
 
-/// Extends the Entity to include logic for converting from Firebase User.
+///  === Extends the Entity to include logic for converting from Firebase User. ===
 class UserModel extends UserEntity {
   const UserModel({
     required super.id,
@@ -13,6 +13,7 @@ class UserModel extends UserEntity {
     required super.authType,
   });
 
+  
   factory UserModel.fromFirebaseUser(User user) {
     // Determine Auth Type based on provider data
     String type = 'unknown';

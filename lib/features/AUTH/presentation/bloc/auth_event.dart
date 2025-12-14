@@ -9,6 +9,7 @@ abstract class AuthEvent extends Equatable {
 }
 
 class AuthCheckStatus extends AuthEvent {} // App start
+
 class AuthLoginEvent extends AuthEvent {
   final String email;
   final String password;

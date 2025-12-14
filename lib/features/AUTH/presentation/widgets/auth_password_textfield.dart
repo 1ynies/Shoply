@@ -82,8 +82,8 @@ class _AuthTextfieldPasswordState extends State<AuthTextfieldPassword> {
               child: SvgPicture.asset(
                 // Note: Ensure these paths are correct for your project structure
                 _isPasswordVisible
-                    ? 'lib/assets/svg/eye_slash.svg' // The open eye icon path
-                    : 'lib/assets/svg/eye.svg',      // The closed eye icon path
+                    ? 'assets/svg/eye_slash.svg' // The open eye icon path
+                    : 'assets/svg/eye.svg',      // The closed eye icon path
                 height: 24,
                 width: 24,
               ),

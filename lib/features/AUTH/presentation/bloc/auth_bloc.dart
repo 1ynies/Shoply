@@ -1,6 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shoplyapp/features/AUTH/domain/usecases/logout_usecase.dart';
+import 'package:shoplyapp/features/AUTH/domain/usecases/GetAuthStatusUseCase.dart';
+import 'package:shoplyapp/features/AUTH/domain/usecases/ResetPasswordUseCase.dart';
+import 'package:shoplyapp/features/AUTH/domain/usecases/SignInWithEmailUseCase.dart';
+import 'package:shoplyapp/features/AUTH/domain/usecases/SignInWithGoogleUseCase.dart';
+import 'package:shoplyapp/features/AUTH/domain/usecases/SignOutUseCase.dart';
+import 'package:shoplyapp/features/AUTH/domain/usecases/SignUpWithEmailUseCase.dart';
 import '../../domain/entities/user_entity.dart';
 // Import the UseCases
 
@@ -43,7 +48,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       final user = await signInUseCase(event.email, event.password);
-      emit(AuthAuthenticated(user));
+      // emit(AuthAuthenticated(user));
+      emit(AuthSuccess(user));
     } catch (e) {
       emit(AuthError(e.toString()));
     }
@@ -57,7 +63,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
-      emit(AuthAuthenticated(user));
+      // emit(AuthAuthenticated(user));
+      emit(AuthSuccess(user));
     } catch (e) {
       emit(AuthError(e.toString()));
     }

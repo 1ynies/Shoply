@@ -11,7 +11,7 @@ class ShoplyTextlogo extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset('lib/assets/svg/app_logo.svg', width: 25,height: 30,),
+          SvgPicture.asset('assets/svg/app_logo.svg', width: 25,height: 30,),
           const SizedBox(width: 10),
           Text(
             'Shoply',

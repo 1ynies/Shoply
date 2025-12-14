@@ -52,6 +52,8 @@ dependencies:
   go_router: ^17.0.1
   get_it: ^9.2.0
   url_launcher: ^6.3.2
+#  Flutter widgets for easily adding gaps inside Flex widgets such as Columns and Rows or scrolling views.
+  gap: ^3.0.1
 
   
   

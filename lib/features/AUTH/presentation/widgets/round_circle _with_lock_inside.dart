@@ -16,7 +16,7 @@ class RoundCircleWithLockInside extends StatelessWidget {
       child: Padding(
         padding: EdgeInsetsGeometry.all(30),
         child: SvgPicture.asset(
-          'lib/assets/svg/lock_closed.svg',
+          'assets/svg/lock_closed.svg',
           
         ),
       ),

@@ -3,6 +3,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
 import '../../../../core/error/exceptions.dart';
 
+// THIS CLASS DO DIRECT FIREBASE CALLS 
+
+// abstarct class
 abstract class AuthRemoteDataSource {
   Stream<UserModel?> get user;
   Future<UserModel> login(String email, String password);
@@ -12,6 +15,7 @@ abstract class AuthRemoteDataSource {
   Future<void> logout();
 }
 
+// the abstract class implemented here
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
@@ -26,6 +30,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     });
   }
 
+
+  // == ACTUAL LOGIN METHOD == 
   @override
   Future<UserModel> login(String email, String password) async {
     try {
@@ -46,7 +52,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     }
   }
-
+  // == ACTUAL REGISTER METHOD ==
   @override
   Future<UserModel> register(
     String fullName,
@@ -67,7 +73,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.message ?? "Registration failed");
     }
   }
-
+  // == ACTUAL GOOGLE LOGIN METHOD ==
   @override
   Future<UserModel> googleLogin() async {
     try {
@@ -90,7 +96,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.toString());
     }
   }
-
+ // == ACTUAL RESETPASSWORD METHOD ==
   @override
   Future<void> resetPassword(String email) async {
     try {
@@ -99,7 +105,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.message ?? "Reset password failed");
     }
   }
-
+  // == ACTUAL LOGOUT METHOD ==
   @override
   Future<void> logout() async {
     await _googleSignIn.signOut();

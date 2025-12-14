@@ -38,7 +38,7 @@ class GoogleSignInButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min, // Keep the Row tight to its children
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset('lib/assets/images/google_icon.png', height: logoHeight),
+            Image.asset('assets/images/google_icon.png', height: logoHeight),
       
             const SizedBox(width: 24.0), // Spacing between logo and text
             // 2. Button Text

@@ -1,13 +1,21 @@
+// == PACKAGES IMPORTS =======================
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart'; // UPDATED IMPORT
+import 'package:url_launcher/url_launcher.dart'; 
+// ===========================================
+
+// == FILES IMPORTS ==========================
+import 'package:shoplyapp/features/AUTH/presentation/pages/loginpage.dart';
+// UPDATED IMPORT
 import 'package:shoplyapp/core/common_widgets/round_navigation_button.dart';
 import 'package:shoplyapp/core/common_widgets/submit_like_button.dart';
 import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
-import 'package:shoplyapp/features/AUTH/presentation/pages/login_page.dart';
 import 'package:shoplyapp/features/AUTH/presentation/widgets/auth_textfield.dart';
 import 'package:shoplyapp/features/AUTH/presentation/widgets/round_circle%20_with_lock_inside.dart';
+// ===========================================
+
+
 
 class PasswordRecoveryPage extends StatefulWidget {
   const PasswordRecoveryPage({super.key});
@@ -53,7 +61,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                   children: [
                      RoundNavigationButton(
                       onTap: () => Navigator.of(context).pop(),
-                      Iconpath: 'lib/assets/svg/arrow_left.svg',
+                      Iconpath: 'assets/svg/arrow_left.svg',
                       iconwidth: 24,
                       iconheight: 24,
                     ),
@@ -92,7 +100,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                             controller: _emailController,
                             autofocus: true,
                             label: 'Enter your email',
-                            prefixicon: 'lib/assets/svg/envelope.svg',
+                            prefixicon: 'assets/svg/envelope.svg',
                           ),
                         ),
                       ],
