@@ -29,6 +29,9 @@ class _LoginPageState extends State<LoginPage> {
   // -- CONTROLLERS --
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  // -- FORM KEY --
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   bool isChecked = false;
 
   @override
@@ -51,14 +54,14 @@ class _LoginPageState extends State<LoginPage> {
               context,
             ).showSnackBar(const SnackBar(content: Text("Login Successful!")));
           }
-          if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
+          // if (state is AuthError) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     SnackBar(
+          //       content: Text(state.message),
+          //       backgroundColor: Colors.red,
+          //     ),
+          //   );
+          // }
         },
 
         child: SafeArea(
@@ -70,238 +73,245 @@ class _LoginPageState extends State<LoginPage> {
                   child: IntrinsicHeight(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          const ShoplyTextlogo(),
-                          const Gap(15),
+                      child: Form(
+                        // -- asseign formkey to form --
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            const ShoplyTextlogo(),
+                            const Gap(15),
 
-                          Text(
-                            'Hi ! Welcome back',
-                            style: GoogleFonts.manrope(
-                              textStyle: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w600,
+                            Text(
+                              'Hi ! Welcome back',
+                              style: GoogleFonts.manrope(
+                                textStyle: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                          const Gap(10),
-                          Text(
-                            'Sign in to your account',
-                            style: GoogleFonts.manrope(
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w300,
+                            const Gap(10),
+                            Text(
+                              'Sign in to your account',
+                              style: GoogleFonts.manrope(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                ),
                               ),
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Email',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              AuthTextfield(
-                                label: 'Enter your email',
-                                prefixicon: 'assets/svg/envelope.svg',
-                                autofocus: false,
-                                controller: _emailController,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Password',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              AuthTextfieldPassword(
-                                label: 'Enter password',
-                                prefixIcon: 'assets/svg/lock_closed.svg',
-                                controller: _passwordController,
-                              ),
-                            ],
-                          ),
-                          //-- REMEMBER ME CHECKBOX & FORGOT PASSWORD LINK --
-                          Row(
-                            children: [
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: isChecked,
-                                    onChanged: (bool? newValue) {
-                                      // Logic kept as provided in source
-                                      setState(() {
-                                        isChecked = newValue ?? false;
-                                      });
-                                    },
-                                    activeColor: const Color(0xFF9AE600),
-                                    checkColor: Colors.white,
-                                    splashRadius: 20,
-                                  ),
-                                  Text(
-                                    'Remember me',
+                            // -- EMAIL FIELD
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Email',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                AuthTextfield(
+                                  label: 'Enter your email',
+                                  prefixicon: 'assets/svg/envelope.svg',
+                                  autofocus: false,
+                                  controller: _emailController,
+                                  // -- Validator logic --
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Password is required';
+                                    }
+                                    return null; // Returns null if valid
+                                  },
+                                ),
+                              ],
+                            ),
+                            // -- PASSWORD FIELD --
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Password',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                AuthTextfieldPassword(
+                                  label: 'Enter password',
+                                  prefixIcon: 'assets/svg/lock_closed.svg',
+                                  controller: _passwordController,
+                                  // -- Validation logic --
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Password is required';
+                                    }
+                                    return null; // Returns null if valid
+                                  },
+                                ),
+                              ],
+                            ),
+                            const Gap(16),
+                            //--  FORGOT PASSWORD LINK --
+                            Row(
+                              children: [
+                                
+                                const Spacer(),
+                                //--NAVIGATION TO PASSWORD RECOVERY PAGE--
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PasswordRecoveryPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Forgot password ?',
                                     style: GoogleFonts.manrope(
                                       textStyle: const TextStyle(
+                                        color: Color(0xFF9AE600),
                                         fontSize: 12,
-                                        fontWeight: FontWeight.w400,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              const Spacer(),
-                              //--NAVIGATION TO PASSWORD RECOVERY PAGE--
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const PasswordRecoveryPage(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Forgot password ?',
-                                  style: GoogleFonts.manrope(
-                                    textStyle: const TextStyle(
-                                      color: Color(0xFF9AE600),
-                                      fontSize: 12,
-                                    ),
-                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const Gap(20),
-                          // -- LOGIN BUTTON --
-                          Row(
-                            children: [
-                              Expanded(
-                                child: BlocConsumer<AuthBloc, AuthState>(
-
-                                  listener: (context, state) {
-                                    if (state is AuthSuccess) {
-                                      // Navigate to Home Page and remove back button history
-                                      context.go('/home');
-                                    }
-                                    if (state is AuthFailure) {
-                                      // Optional: Show error snackbar
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(content: Text(state.message)),
-                                      );
-                                    }
-                                  },
-                                  builder: (context, state) {
-                                    if (state is AuthLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                    return SubmitLikeButton(
-                                      onPressed: () {
-                                        // -- Gives user a feedback with a slight vibration --
-                                        HapticFeedback.mediumImpact();
-                                        // TRIGGER BLOC EVENT
-                                        context.read<AuthBloc>().add(
-                                          AuthLoginEvent(
-                                            _emailController.text.trim(),
-                                            _passwordController.text.trim(),
+                              ],
+                            ),
+                            const Gap(20),
+                            // -- LOGIN BUTTON --
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: BlocConsumer<AuthBloc, AuthState>(
+                                    listener: (context, state) {
+                                      if (state is AuthSuccess) {
+                                        // Navigate to Home Page and remove back button history
+                                        context.go('/home');
+                                      }
+                                      if (state is AuthError) {
+                                        // Optional: Show error snackbar
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(state.message),
                                           ),
                                         );
-                                      },
-                                      title: 'Login',
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-
-                          // -- OR SIGN IN WITH DIVIDER --
-                          Row(
-                            children: [
-                              const Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  thickness: 1.0,
-                                  endIndent: 10.0,
-                                ),
-                              ),
-                              const Text(
-                                "Or Sign in with",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                              const Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  thickness: 1.0,
-                                  indent: 10.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          // -- SIGN UP WITH GOOGLE BUTTON --
-                          Row(
-                            children: [
-                              Expanded(
-                                child: GoogleSignInButton(
-                                  onPressed: () {
-                                    HapticFeedback.mediumImpact();
-                                    context.read<AuthBloc>().add(
-                                      AuthGoogleSignInEvent(),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          // -- REGISTER LINK --
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Don\'t have account ? ',
-                                style: GoogleFonts.manrope(
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
+                                      }
+                                    },
+                                    builder: (context, state) {
+                                      if (state is AuthLoading) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      return SubmitLikeButton(
+                                        onPressed: () {
+                                          //  Trigger Validation on Click
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            // Validation passed, proceed with logic
+                                            // -- Gives user a feedback with a slight vibration --
+                                            HapticFeedback.mediumImpact();
+                                            // TRIGGER BLOC EVENT
+                                            context.read<AuthBloc>().add(
+                                              AuthLoginEvent(
+                                                email: _emailController.text
+                                                    .trim(),
+                                                password: _passwordController
+                                                    .text
+                                                    .trim(),
+                                              ),
+                                            );
+                                          }
+                                          // If validation fails, the UI updates automatically to red
+                                        },
+                                        title: 'Login',
+                                      );
+                                    },
                                   ),
                                 ),
-                              ),
-                              // -- NAVIGATION TOREGISTER PAGE --
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegisterPage(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Register',
+                              ],
+                            ),
+                            const Spacer(),
+
+                            // -- OR SIGN IN WITH DIVIDER --
+                            Row(
+                              children: [
+                                const Expanded(
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    thickness: 1.0,
+                                    endIndent: 10.0,
+                                  ),
+                                ),
+                                const Text(
+                                  "Or Sign in with",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                                const Expanded(
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    thickness: 1.0,
+                                    indent: 10.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            // -- SIGN UP WITH GOOGLE BUTTON --
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GoogleSignInButton(
+                                    onPressed: () {
+                                      HapticFeedback.mediumImpact();
+                                      context.read<AuthBloc>().add(
+                                        AuthGoogleSignInEvent(),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            // -- REGISTER LINK --
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Don\'t have account ? ',
                                   style: GoogleFonts.manrope(
                                     textStyle: const TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16,
-                                      color: Color(0xFF9AE600),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                // -- NAVIGATION TOREGISTER PAGE --
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RegisterPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Register',
+                                    style: GoogleFonts.manrope(
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: Color(0xFF9AE600),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

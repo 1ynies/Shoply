@@ -5,14 +5,19 @@ import '../entities/user_entity.dart';
 abstract class AuthRepository {
   Stream<UserEntity?> get user;
   
-  // absract login with email function 
-  Future<UserEntity> signInWithEmail(String email, String password);
+  // == FIXED: Use named parameters and added rememberMe ==
+  Future<UserEntity> signInWithEmail({
+    required String email, 
+    required String password, 
+    // <--- Added this for the "Remember Me" feature
+  });
   
-  // abstract register with email function
+  // == FIXED: Removed rememberMe (not needed for registration usually) ==
   Future<UserEntity> signUpWithEmail({
     required String fullName,
     required String email,
     required String password,
+    
   });
   
   // abstract sign in with google function
@@ -21,10 +26,7 @@ abstract class AuthRepository {
   // abstract send password reset email function
   Future<void> sendPasswordResetEmail(String email);
   
-  //abstract sign out function
+  // abstract sign out function
   Future<void> signOut();
+  Future<bool> isLoggedIn();
 }
-
-
-
-

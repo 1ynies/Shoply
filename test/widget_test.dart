@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shoplyapp/features/INTRO/presentation/pages/splash_screen.dart'; // Import SplashScreen
 import 'package:shoplyapp/main.dart';

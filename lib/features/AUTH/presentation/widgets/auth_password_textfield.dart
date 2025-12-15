@@ -6,15 +6,14 @@ class AuthTextfieldPassword extends StatefulWidget {
   final String label;
   final String prefixIcon;
   final TextEditingController controller;
-  
-  // A controller can optionally be passed from the parent widget if needed
-  // final TextEditingController? controller;
+  final String? Function(String?)? validator;
 
   const AuthTextfieldPassword({
     super.key,
     required this.label,
     required this.prefixIcon,
     required this.controller,
+    this.validator,
   });
 
   @override
@@ -22,15 +21,15 @@ class AuthTextfieldPassword extends StatefulWidget {
 }
 
 class _AuthTextfieldPasswordState extends State<AuthTextfieldPassword> {
-  // 1. State variable to track visibility
+  //  State variable to track visibility
   bool _isPasswordVisible = false;
 
-  // 2. Internal controller, which should be disposed
+  //  Internal controller, which should be disposed
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    // 3. Dispose the internal controller when the widget is removed
+    //  Dispose the internal controller when the widget is removed
     _passwordController.dispose();
     super.dispose();
   }
@@ -40,7 +39,9 @@ class _AuthTextfieldPasswordState extends State<AuthTextfieldPassword> {
     return Container(
       height: 70,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextField(
+      child: TextFormField(
+        // --- VALIDATOR ---
+        validator: widget.validator,
       
         controller: widget.controller,
         
@@ -50,7 +51,7 @@ class _AuthTextfieldPasswordState extends State<AuthTextfieldPassword> {
         obscuringCharacter: '•',
         maxLines: 1,
 
-        cursorColor: Colors.indigo,
+        cursorColor: Colors.black87,
         
         // Apply Manrope font styling
         style: GoogleFonts.manrope(
@@ -91,15 +92,8 @@ class _AuthTextfieldPasswordState extends State<AuthTextfieldPassword> {
             color: Colors.grey.shade700,
           ),
 
-          // --- Styling (Kept from original) ---
-          floatingLabelStyle: GoogleFonts.manrope(
-            textStyle: const TextStyle(
-              color: Colors.black87,
-              fontSize: 14.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
           
+          // --- Focused Border ---
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(20),
@@ -111,12 +105,22 @@ class _AuthTextfieldPasswordState extends State<AuthTextfieldPassword> {
           ),
           
           hintText: widget.label, // Access properties via widget.
-          
+          // --- Normal Border ---
           border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.all(
               Radius.circular(20),
             ),
+          ),
+          // --- ERROR BORDER (Red when invalid) ---
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(color: Colors.red, width: 1),
+          ),
+          // --- FOCUSED ERROR BORDER (Red when invalid and clicked) ---
+          focusedErrorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(color: Colors.red, width: 1.5),
           ),
           
           contentPadding: const EdgeInsets.symmetric(

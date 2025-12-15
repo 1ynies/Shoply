@@ -30,6 +30,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _rePasswordController = TextEditingController();
+  // -- FORM KEY --
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
   @override
@@ -66,272 +68,288 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: IntrinsicHeight(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          const ShoplyTextlogo(),
-
-                          // Header Texts
-                          Text(
-                            'Hi ! Welcome ',
-                            style: GoogleFonts.manrope(
-                              textStyle: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'Create an account',
-                            style: GoogleFonts.manrope(
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ),
-
-                          // -- FULLNAME INPUT --
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Fullname',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              const Gap(4),
-                              AuthTextfield(
-                                autofocus: false,
-                                controller: _nameController,
-                                label: 'Enter your fullname',
-                                prefixicon: 'assets/svg/user_outline.svg',
-                              ),
-                            ],
-                          ),
-
-                          // -- EMAIL INPUT --
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Email',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              const Gap(8),
-                              AuthTextfield(
-                                controller: _emailController,
-                                label: 'Enter your email',
-                                prefixicon: 'assets/svg/envelope.svg',
-                                autofocus: false,
-                              ),
-                            ],
-                          ),
-
-                          // -- PASSWORD INPUT --
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Password',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              const Gap(4),
-                              AuthTextfieldPassword(
-                                label: 'Enter password',
-                                prefixIcon: 'assets/svg/lock_closed.svg',
-                                controller: _passwordController,
-                              ),
-                            ],
-                          ),
-
-                          // -- RETYPE PASSWORD INPUT --
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Re-type password',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                              const Gap(4),
-                              AuthTextfieldPassword(
-                                label: 'Re-type password',
-                                prefixIcon: 'assets/svg/lock_opened.svg',
-                                controller: _rePasswordController,
-                              ),
-                            ],
-                          ),
-
-                          // Remember Me Checkbox
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: isChecked,
-
-                                onChanged: (bool? newValue) {
-                                  setState(() {
-                                    isChecked = newValue ?? false;
-                                  });
-                                },
-                                activeColor: const Color(0xFF9AE600),
-                                checkColor: Colors.white,
-                                splashRadius: 20,
-                              ),
-                              Text(
-                                'Remember me',
-                                style: GoogleFonts.manrope(
-                                  textStyle: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            const ShoplyTextlogo(),
+                            const Gap(15),
+                            // Header Texts
+                            Text(
+                              'Hi ! Welcome ',
+                              style: GoogleFonts.manrope(
+                                textStyle: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            const Gap(15),
+                            Text(
+                              'Create an account',
+                              style: GoogleFonts.manrope(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                            const Gap(10),
 
-                          // -- SIGN UP BUTTON --
-                          Row(
-                            children: [
-                              Expanded(
-                                child: BlocConsumer<AuthBloc, AuthState>(
-                                  listener: (context, state) {
-                                    if (state is AuthSuccess) {
-                                      // Navigate to Home Page and remove back button history
-                                      context.go('/home');
+                            // -- FULLNAME INPUT --
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Fullname',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const Gap(4),
+                                AuthTextfield(
+                                  autofocus: false,
+                                  controller: _nameController,
+                                  label: 'Enter your fullname',
+                                  prefixicon: 'assets/svg/user_outline.svg',
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Fullname field is required';
                                     }
-                                    if (state is AuthFailure) {
-                                      // Optional: Show error snackbar
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(content: Text(state.message)),
-                                      );
-                                    }
+                                    return null; // Returns null if valid
                                   },
+                                ),
+                              ],
+                            ),
 
-                                  builder: (context, state) {
-                                    if (state is AuthLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
+                            // -- EMAIL INPUT --
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Email',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const Gap(8),
+                                AuthTextfield(
+                                  controller: _emailController,
+                                  label: 'Enter your email',
+                                  prefixicon: 'assets/svg/envelope.svg',
+                                  autofocus: false,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Email field is required';
                                     }
+                                    return null; // Returns null if valid
+                                  },
+                                ),
+                              ],
+                            ),
 
-                                    return SubmitLikeButton(
-                                      onPressed: () {
-                                        HapticFeedback.mediumImpact();
-                                        if (_passwordController.text !=
-                                            _rePasswordController.text) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                "Passwords do not match",
-                                              ),
-                                            ),
-                                          );
-                                          return;
-                                        }
+                            // -- PASSWORD INPUT --
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Password',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const Gap(4),
+                                AuthTextfieldPassword(
+                                  label: 'Enter password',
+                                  prefixIcon: 'assets/svg/lock_closed.svg',
+                                  controller: _passwordController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Password field is required';
+                                    }
+                                    return null; // Returns null if valid
+                                  },
+                                ),
+                              ],
+                            ),
 
-                                        context.read<AuthBloc>().add(
-                                          AuthRegisterEvent(
-                                            fullName: _nameController.text
-                                                .trim(),
-                                            email: _emailController.text.trim(),
-                                            password: _passwordController.text
-                                                .trim(),
+                            // -- RETYPE PASSWORD INPUT --
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Re-type password',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const Gap(4),
+                                AuthTextfieldPassword(
+                                  label: 'Re-type password',
+                                  prefixIcon: 'assets/svg/lock_opened.svg',
+                                  controller: _rePasswordController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please retype your password';
+                                    }
+                                    // Check if the value matches the first password controller
+                                    if (value != _passwordController.text) {
+                                      return 'Passwords do not match';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ],
+                            ),
+
+                            const Gap(16),
+
+                            // -- SIGN UP BUTTON --
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: BlocConsumer<AuthBloc, AuthState>(
+                                    listener: (context, state) {
+                                      if (state is AuthSuccess) {
+                                        // Navigate to Home Page and remove back button history
+                                        context.go('/home');
+                                      }
+                                      if (state is AuthError) {
+                                        // Optional: Show error snackbar
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(state.message),
                                           ),
                                         );
-                                      },
-                                      title: 'Sign up',
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
+                                      }
+                                    },
 
-                          // Divider
-                          Row(
-                            children: const [
-                              Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  thickness: 1.0,
-                                  endIndent: 10.0,
-                                ),
-                              ),
-                              Text(
-                                "Or Sign up with",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                              Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  thickness: 1.0,
-                                  indent: 10.0,
-                                ),
-                              ),
-                            ],
-                          ),
+                                    builder: (context, state) {
+                                      if (state is AuthLoading) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
 
-                          const SizedBox(height: 20),
+                                      return SubmitLikeButton(
+                                        onPressed: () {
+                                          //  Trigger Validation on Click
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            HapticFeedback.mediumImpact();
+                                            if (_passwordController.text !=
+                                                _rePasswordController.text) {
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    "Passwords do not match",
+                                                  ),
+                                                ),
+                                              );
+                                              return;
+                                            }
 
-                          // Google Button
-                          Row(
-                            children: [
-                              Expanded(
-                                child: GoogleSignInButton(
-                                  onPressed: () {
-                                    HapticFeedback.mediumImpact();
-                                    context.read<AuthBloc>().add(
-                                      AuthGoogleSignInEvent(),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          // Login Redirect
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Already have an account ? ',
-                                style: GoogleFonts.manrope(
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
+                                            context.read<AuthBloc>().add(
+                                              AuthRegisterEvent(
+                                                fullName: _nameController.text
+                                                    .trim(),
+                                                email: _emailController.text
+                                                    .trim(),
+                                                password: _passwordController
+                                                    .text
+                                                    .trim(),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        title: 'Sign up',
+                                      );
+                                    },
                                   ),
                                 ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginPage(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Log in',
+                              ],
+                            ),
+                            const Spacer(),
+
+                            // Divider
+                            Row(
+                              children: const [
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    thickness: 1.0,
+                                    endIndent: 10.0,
+                                  ),
+                                ),
+                                Text(
+                                  "Or Sign up with",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    thickness: 1.0,
+                                    indent: 10.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            // Google Button
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GoogleSignInButton(
+                                    onPressed: () {
+                                      HapticFeedback.mediumImpact();
+                                      context.read<AuthBloc>().add(
+                                        AuthGoogleSignInEvent(),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            // Login Redirect
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Already have an account ? ',
                                   style: GoogleFonts.manrope(
                                     textStyle: const TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16,
-                                      color: Color(0xFF9AE600),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => const LoginPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Log in',
+                                    style: GoogleFonts.manrope(
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: Color(0xFF9AE600),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -4,6 +4,7 @@
         android:label="shoplyapp"
         android:name="${applicationName}"
         android:icon="@mipmap/icon_app">
+        android:enableOnBackInvokedCallback="true"
         <activity
             android:name=".MainActivity"
             android:exported="true"

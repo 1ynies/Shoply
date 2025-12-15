@@ -56,7 +56,8 @@ class MyApp extends StatelessWidget {
         routerConfig: AppRouter.router,
 
         // == WHEN YOU ARE READY TO USE THE 'KEEPING THE USER LOGGED IN THINGY ' REPLACE THE LINE ABOVE WITH THE LINE BELLOW
-        // routerConfig: AppRouter(di.sl<AuthBloc>()).router, ==== THIS IS THE LINE
+        // routerConfig: AppRouter(di.sl<AuthBloc>()).router,
+        // ==== THIS IS THE LINE
       ),
     );
   }

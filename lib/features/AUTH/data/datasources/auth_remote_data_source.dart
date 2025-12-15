@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import '../models/user_model.dart';
 import '../../../../core/error/exceptions.dart';
 
-// THIS CLASS DO DIRECT FIREBASE CALLS 
+// THIS CLASS DO DIRECT FIREBASE CALLS
 
 // abstarct class
 abstract class AuthRemoteDataSource {
@@ -30,8 +31,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     });
   }
 
-
-  // == ACTUAL LOGIN METHOD == 
+  // == ACTUAL LOGIN METHOD ==
   @override
   Future<UserModel> login(String email, String password) async {
     try {
@@ -52,6 +52,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     }
   }
+
   // == ACTUAL REGISTER METHOD ==
   @override
   Future<UserModel> register(
@@ -73,18 +74,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.message ?? "Registration failed");
     }
   }
+
   // == ACTUAL GOOGLE LOGIN METHOD ==
   @override
   Future<UserModel> googleLogin() async {
     try {
+      // Ensure initialized
+      await _googleSignIn.initialize();
+      // === ATTEMPT LOGIN === 
       final GoogleSignInAccount? googleUser = await _googleSignIn
           .authenticate();
-      if (googleUser == null) throw ServerException("Google Sign-In Aborted");
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      if (googleUser == null) throw ServerException("Google Sign-In Aborted");
+      //  === CONTINUE WITH AUTH IF USER EXISTS ===
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
-        // accessToken: googleAuth.accessToken,
+        accessToken: null,
         idToken: googleAuth.idToken,
       );
 
@@ -96,7 +101,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.toString());
     }
   }
- // == ACTUAL RESETPASSWORD METHOD ==
+
+  // == ACTUAL RESET PASSWORD METHOD ==
   @override
   Future<void> resetPassword(String email) async {
     try {
@@ -105,6 +111,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.message ?? "Reset password failed");
     }
   }
+
   // == ACTUAL LOGOUT METHOD ==
   @override
   Future<void> logout() async {

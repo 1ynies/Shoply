@@ -5,7 +5,16 @@ class SignInWithEmailUseCase {
   final AuthRepository repository;
   SignInWithEmailUseCase(this.repository);
 
-  Future<UserEntity> call(String email, String password) {
-    return repository.signInWithEmail(email, password);
+  // UPDATE: Add named parameter 'rememberMe'
+  Future<UserEntity> call({
+    required String email,
+    required String password,
+    
+  }) {
+    return repository.signInWithEmail(
+      email: email,
+      password: password,
+      
+    );
   }
 }

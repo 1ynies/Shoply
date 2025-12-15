@@ -7,13 +7,11 @@ import 'package:shoplyapp/features/AUTH/domain/usecases/SignInWithGoogleUseCase.
 import 'package:shoplyapp/features/AUTH/domain/usecases/SignOutUseCase.dart';
 import 'package:shoplyapp/features/AUTH/domain/usecases/SignUpWithEmailUseCase.dart';
 import '../../domain/entities/user_entity.dart';
-// Import the UseCases
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  // Dependencies are now UseCases, not Repository
   final SignInWithEmailUseCase signInUseCase;
   final SignUpWithEmailUseCase signUpUseCase;
   final SignInWithGoogleUseCase googleSignInUseCase;
@@ -38,17 +36,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onCheckStatus(AuthCheckStatus event, Emitter<AuthState> emit) async {
-    // Using the Stream UseCase
-    await emit.forEach(getAuthStatusUseCase(), onData: (user) {
-      return user != null ? AuthAuthenticated(user) : AuthUnauthenticated();
-    });
+    // emit.forEach automatically manages the stream subscription for you
+    await emit.forEach(
+      getAuthStatusUseCase(),
+      onData: (user) {
+        if (user != null) {
+          // User is found in the stream -> Logged In
+          return AuthSuccess(user); // Or AuthAuthenticated(user) depending on your state
+        } else {
+          // No user found -> Logged Out
+          return AuthUnauthenticated();
+        }
+      },
+      onError: (_, __) => AuthUnauthenticated(),
+    );
   }
 
   Future<void> _onLogin(AuthLoginEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(AuthLoading(isGoogle: true));
     try {
-      final user = await signInUseCase(event.email, event.password);
-      // emit(AuthAuthenticated(user));
+      final user = await signInUseCase(
+        email: event.email, 
+        password: event.password,// This works now!
+      );
+      
       emit(AuthSuccess(user));
     } catch (e) {
       emit(AuthError(e.toString()));
@@ -56,14 +67,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onRegister(AuthRegisterEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(AuthLoading(isGoogle: false));
     try {
+      // We pass rememberMe here too
       final user = await signUpUseCase(
         fullName: event.fullName,
         email: event.email,
-        password: event.password,
+        password: event.password, // <--- Added this call
       );
-      // emit(AuthAuthenticated(user));
       emit(AuthSuccess(user));
     } catch (e) {
       emit(AuthError(e.toString()));

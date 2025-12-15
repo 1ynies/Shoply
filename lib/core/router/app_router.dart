@@ -1,6 +1,7 @@
 // == PACKAGES IMPORTS =======================
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
 // ===========================================
 
 // == FILES IMPORTS ==========================
@@ -99,4 +100,6 @@ class AppRouter {
     },
     */
   );
+
+  AppRouter(AuthBloc authBloc);
 }
