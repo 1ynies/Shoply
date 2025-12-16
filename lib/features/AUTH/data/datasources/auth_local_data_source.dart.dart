@@ -1,9 +1,14 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthLocalDataSource {
+  // -- Auth Logic --
   Future<void> cacheToken(String uid); // Save User ID
   Future<void> clearCache();           // Delete User ID (Logout)
   Future<bool> isUserLoggedIn();       // Check if saved
+  
+  // -- Onboarding Logic (NEW) --
+  Future<void> setOnboardingSeen();    // Save flag that user finished onboarding
+  Future<bool> isOnboardingSeen();     // Check if user has seen onboarding
 }
 
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
@@ -11,11 +16,15 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
   AuthLocalDataSourceImpl({required this.sharedPreferences});
 
+  // Keys
   static const String CACHED_UID = 'CACHED_USER_UID';
+  static const String ONBOARDING_SEEN = 'ONBOARDING_SEEN'; // New Key
 
+  // ---------------------------------------------------------------------------
+  // AUTH METHODS
+  // ---------------------------------------------------------------------------
   @override
   Future<void> cacheToken(String uid) async {
-    // We await this to ensure it saves, but we don't return the boolean result
     await sharedPreferences.setString(CACHED_UID, uid);
   }
 
@@ -26,7 +35,21 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
   @override
   Future<bool> isUserLoggedIn() async {
-    // Check if the key exists in storage
     return sharedPreferences.containsKey(CACHED_UID);
+  }
+
+  // ---------------------------------------------------------------------------
+  // ONBOARDING METHODS
+  // ---------------------------------------------------------------------------
+  @override
+  Future<void> setOnboardingSeen() async {
+    // Save 'true' to indicate onboarding is done
+    await sharedPreferences.setBool(ONBOARDING_SEEN, true);
+  }
+
+  @override
+  Future<bool> isOnboardingSeen() async {
+    // Return true if exists, otherwise return false
+    return sharedPreferences.getBool(ONBOARDING_SEEN) ?? false;
   }
 }

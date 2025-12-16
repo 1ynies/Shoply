@@ -1,5 +1,3 @@
-
-
 // import 'package:hive_flutter/hive_flutter.dart'; // Uncomment when ready
 
 // --- Core Imports ---
@@ -24,11 +22,11 @@ void main() async {
   // 3. Initialize Dependency Injection (GetIt)
   await di.initDependencies();
 
-  // --- HIVE INITIALIZATION (Commented out as per your code) ---
+  // --- HIVE INITIALIZATION ---
   // await Hive.initFlutter();
   // Hive.registerAdapter(ProductModelAdapter());
   // await Hive.openBox<CartItemModel>('cart_box');
-  // -----------------------------------------------------------
+  // ---------------------------
 
   runApp(const MyApp());
 }
@@ -38,26 +36,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Wrap the app in MultiBlocProvider to make AuthBloc available globally
+    // 1. Get the AuthBloc instance from Service Locator
+    // We create it here so we can pass the SAME instance to both the Router and the Provider
+    final authBloc = di.sl<AuthBloc>();
+
+    // 2. Trigger the "Check Status" event immediately
+    // This starts the logic: Splash -> Check Local Storage -> Check Firebase
+    authBloc.add(AuthCheckStatus());
+
+    // 3. Initialize the Router with the AuthBloc
+    final appRouter = AppRouter(authBloc);
+
     return MultiBlocProvider(
       providers: [
-        // Initialize AuthBloc and trigger the check status event immediately
+        // 4. Provide the AuthBloc to the widget tree
+        // We use 'create' to simply return the instance we already grabbed
         BlocProvider<AuthBloc>(
-          create: (context) => di.sl<AuthBloc>()..add(AuthCheckStatus()),
+          create: (_) => authBloc,
         ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
 
-        // 1. Theme Configuration
+        // Theme Configuration
         theme: AppTheme.lightTheme,
 
-        // 2. Router Configuration
-        routerConfig: AppRouter.router,
-
-        // == WHEN YOU ARE READY TO USE THE 'KEEPING THE USER LOGGED IN THINGY ' REPLACE THE LINE ABOVE WITH THE LINE BELLOW
-        // routerConfig: AppRouter(di.sl<AuthBloc>()).router,
-        // ==== THIS IS THE LINE
+        // == ROUTER CONFIGURATION ==
+        // We access the 'router' property of your AppRouter class
+        routerConfig: appRouter.router, 
       ),
     );
   }

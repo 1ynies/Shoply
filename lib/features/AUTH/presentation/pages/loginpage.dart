@@ -32,8 +32,6 @@ class _LoginPageState extends State<LoginPage> {
   // -- FORM KEY --
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool isChecked = false;
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -44,24 +42,35 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // -- BLOC LISTENER FOR NAVIGATION AND ERRORS --
+      // -- CENTRALIZED BLOC LISTENER --
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthAuthenticated) {
-            // Navigate to Home Page (Replace '/home' with your actual route or widget)
-            Navigator.of(context).pushReplacementNamed('/home');
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text("Login Successful!")));
+          // -- SUCCESS --
+          if (state is AuthAuthenticated || state is AuthSuccess) {
+            context.go('/home');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Login Successful!")),
+            );
           }
-          // if (state is AuthError) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     SnackBar(
-          //       content: Text(state.message),
-          //       backgroundColor: Colors.red,
-          //     ),
-          //   );
-          // }
+          
+          // -- ERROR (Moved Custom SnackBar Here) --
+          if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  // Use state.message if available, or fallback text
+                  'There might have been a problem, please try again',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red.shade400,
+                behavior: SnackBarBehavior.floating,
+                margin: const EdgeInsets.all(30),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            );
+          }
         },
 
         child: SafeArea(
@@ -74,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Form(
-                        // -- asseign formkey to form --
+                        // -- assign formkey to form --
                         key: _formKey,
                         child: Column(
                           children: [
@@ -99,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
+                            const Gap(20),
                             // -- EMAIL FIELD
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,9 +125,9 @@ class _LoginPageState extends State<LoginPage> {
                                   // -- Validator logic --
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Password is required';
+                                      return 'Email field is required';
                                     }
-                                    return null; // Returns null if valid
+                                    return null;
                                   },
                                 ),
                               ],
@@ -137,9 +147,9 @@ class _LoginPageState extends State<LoginPage> {
                                   // -- Validation logic --
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Password is required';
+                                      return 'Password field is required';
                                     }
-                                    return null; // Returns null if valid
+                                    return null;
                                   },
                                 ),
                               ],
@@ -148,7 +158,6 @@ class _LoginPageState extends State<LoginPage> {
                             //--  FORGOT PASSWORD LINK --
                             Row(
                               children: [
-                                
                                 const Spacer(),
                                 //--NAVIGATION TO PASSWORD RECOVERY PAGE--
                                 InkWell(
@@ -177,53 +186,22 @@ class _LoginPageState extends State<LoginPage> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: BlocConsumer<AuthBloc, AuthState>(
-                                    listener: (context, state) {
-                                      if (state is AuthSuccess) {
-                                        // Navigate to Home Page and remove back button history
-                                        context.go('/home');
-                                      }
-                                      if (state is AuthError) {
-                                        // Optional: Show error snackbar
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(state.message),
+                                  // Removed BlocConsumer, just using the button directly
+                                  child: SubmitLikeButton(
+                                    onPressed: () {
+                                      //  Trigger Validation on Click
+                                      if (_formKey.currentState!.validate()) {
+                                        HapticFeedback.mediumImpact();
+                                        // TRIGGER BLOC EVENT
+                                        context.read<AuthBloc>().add(
+                                          AuthLoginEvent(
+                                            email: _emailController.text.trim(),
+                                            password: _passwordController.text.trim(),
                                           ),
                                         );
                                       }
                                     },
-                                    builder: (context, state) {
-                                      if (state is AuthLoading) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                      return SubmitLikeButton(
-                                        onPressed: () {
-                                          //  Trigger Validation on Click
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            // Validation passed, proceed with logic
-                                            // -- Gives user a feedback with a slight vibration --
-                                            HapticFeedback.mediumImpact();
-                                            // TRIGGER BLOC EVENT
-                                            context.read<AuthBloc>().add(
-                                              AuthLoginEvent(
-                                                email: _emailController.text
-                                                    .trim(),
-                                                password: _passwordController
-                                                    .text
-                                                    .trim(),
-                                              ),
-                                            );
-                                          }
-                                          // If validation fails, the UI updates automatically to red
-                                        },
-                                        title: 'Login',
-                                      );
-                                    },
+                                    title: 'Login',
                                   ),
                                 ),
                               ],
@@ -287,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ),
                                 ),
-                                // -- NAVIGATION TOREGISTER PAGE --
+                                // -- NAVIGATION TO REGISTER PAGE --
                                 InkWell(
                                   onTap: () {
                                     Navigator.of(context).push(

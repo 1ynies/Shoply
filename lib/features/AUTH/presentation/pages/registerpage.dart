@@ -32,7 +32,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _rePasswordController = TextEditingController();
   // -- FORM KEY --
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isChecked = false;
 
   @override
   void dispose() {
@@ -46,19 +45,34 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // 1. ONE CENTRAL LISTENER FOR EVERYTHING
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthAuthenticated) {
-            // -- NAVIGATE TO HOME PAGE IF AUTH IS SUCCESSFUL --
-            Navigator.of(context).pushReplacementNamed('/home');
+          // -- SUCCESS --
+          if (state is AuthAuthenticated || state is AuthSuccess) {
+             context.go('/home');
           }
+          
+          // -- ERROR (Custom SnackBar is here now) --
           if (state is AuthError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                // Use state.message to show the real backend error, 
+                // or hardcode text if you prefer generic messages.
+                content: Text(
+                  'There might have been a problem, please try again',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red.shade400,
+                behavior: SnackBarBehavior.floating,
+                margin: const EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            );
           }
         },
-
         child: SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) {
@@ -113,7 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     if (value == null || value.isEmpty) {
                                       return 'Fullname field is required';
                                     }
-                                    return null; // Returns null if valid
+                                    return null;
                                   },
                                 ),
                               ],
@@ -137,7 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     if (value == null || value.isEmpty) {
                                       return 'Email field is required';
                                     }
-                                    return null; // Returns null if valid
+                                    return null;
                                   },
                                 ),
                               ],
@@ -160,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     if (value == null || value.isEmpty) {
                                       return 'Password field is required';
                                     }
-                                    return null; // Returns null if valid
+                                    return null;
                                   },
                                 ),
                               ],
@@ -183,7 +197,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                     if (value == null || value.isEmpty) {
                                       return 'Please retype your password';
                                     }
-                                    // Check if the value matches the first password controller
                                     if (value != _passwordController.text) {
                                       return 'Passwords do not match';
                                     }
@@ -196,70 +209,34 @@ class _RegisterPageState extends State<RegisterPage> {
                             const Gap(16),
 
                             // -- SIGN UP BUTTON --
+                            // 2. REMOVED BlocConsumer here. Logic is handled at the top.
                             Row(
                               children: [
                                 Expanded(
-                                  child: BlocConsumer<AuthBloc, AuthState>(
-                                    listener: (context, state) {
-                                      if (state is AuthSuccess) {
-                                        // Navigate to Home Page and remove back button history
-                                        context.go('/home');
-                                      }
-                                      if (state is AuthError) {
-                                        // Optional: Show error snackbar
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(state.message),
+                                  child: SubmitLikeButton(
+                                    onPressed: () {
+                                      // Trigger Validation on Click
+                                      if (_formKey.currentState!.validate()) {
+                                        HapticFeedback.mediumImpact();
+                                        
+                                        // // Extra check just in case
+                                        // if (_passwordController.text != _rePasswordController.text) {
+                                        //   ScaffoldMessenger.of(context).showSnackBar(
+                                        //     const SnackBar(content: Text("Passwords do not match")),
+                                        //   );
+                                        //   return;
+                                        // }
+
+                                        context.read<AuthBloc>().add(
+                                          AuthRegisterEvent(
+                                            fullName: _nameController.text.trim(),
+                                            email: _emailController.text.trim(),
+                                            password: _passwordController.text.trim(),
                                           ),
                                         );
                                       }
                                     },
-
-                                    builder: (context, state) {
-                                      if (state is AuthLoading) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-
-                                      return SubmitLikeButton(
-                                        onPressed: () {
-                                          //  Trigger Validation on Click
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            HapticFeedback.mediumImpact();
-                                            if (_passwordController.text !=
-                                                _rePasswordController.text) {
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    "Passwords do not match",
-                                                  ),
-                                                ),
-                                              );
-                                              return;
-                                            }
-
-                                            context.read<AuthBloc>().add(
-                                              AuthRegisterEvent(
-                                                fullName: _nameController.text
-                                                    .trim(),
-                                                email: _emailController.text
-                                                    .trim(),
-                                                password: _passwordController
-                                                    .text
-                                                    .trim(),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        title: 'Sign up',
-                                      );
-                                    },
+                                    title: 'Sign up',
                                   ),
                                 ),
                               ],

@@ -1,10 +1,18 @@
+// === PACKAGES IMPORTS ===
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+//=========================
+
+// === FILE IMPORTS ======= 
 import 'package:shoplyapp/core/common_widgets/shoply_text&logo.dart';
 import 'package:shoplyapp/core/common_widgets/submit_like_button.dart';
-import 'package:shoplyapp/features/INTRO/presentation/pages/welcome_page.dart';
+import 'package:shoplyapp/core/di/injection_container.dart';
+import 'package:shoplyapp/features/AUTH/data/datasources/auth_local_data_source.dart.dart';
 import 'package:shoplyapp/features/INTRO/presentation/widgets/onboarding_indicator_widget.dart';
-import 'package:flutter/services.dart';
+// ========================
+
 
 // -- The StatefulWidget is used to hold and potentially modify the local state variables, like _currentStep , that determine the progress indicator's appearance. --
 class OnBoarding2 extends StatefulWidget {
@@ -23,14 +31,15 @@ class _OnBoarding1State extends State<OnBoarding2> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding:const  EdgeInsets.all(16),
           child: Column(
             // -- to Align the widget so they will take all the space available and leave equal spaces between them  --
             mainAxisAlignment: .spaceBetween,
             children: [
               // -- pre-made widget --
-              ShoplyTextlogo(),
-              Image.asset('lib/assets/images/girl_opening_package.png'),
+              const ShoplyTextlogo(),
+              // === IMAGE === 
+              Image.asset('assets/images/girl_opening_package.png'),
 
               Column(
                 crossAxisAlignment: .start,
@@ -39,7 +48,7 @@ class _OnBoarding1State extends State<OnBoarding2> {
                     textAlign: TextAlign.left,
                     text: TextSpan(
                       style: GoogleFonts.manrope(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
                           color: Colors.black,
@@ -49,9 +58,9 @@ class _OnBoarding1State extends State<OnBoarding2> {
                         TextSpan(text: 'Fast '),
                         TextSpan(
                           text: 'delivery ',
-                          style: TextStyle(color: Color(0xFF9AE600)),
+                          style: const  TextStyle(color: Color(0xFF9AE600)),
                         ),
-                        TextSpan(text: 'to Home,Style Arrives Sooner'),
+                        TextSpan(text: 'to Home, Style Arrives Sooner'),
                       ],
                     ),
                   ),
@@ -73,11 +82,8 @@ class _OnBoarding1State extends State<OnBoarding2> {
                         // -- This line gives the user some feedback with slight vibration  --
                         HapticFeedback.lightImpact();
                         // -- Navigation to WelcomePage --
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const WelcomePage(),
-                          ),
-                        );
+                        sl<AuthLocalDataSource>().setOnboardingSeen();
+                        context.go('/welcome');
                       },
                       title: 'Next',
                     ),

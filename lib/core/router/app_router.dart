@@ -1,6 +1,7 @@
 // == PACKAGES IMPORTS =======================
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:shoplyapp/core/router/go_router_refrech_stream.dart';
 import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
 // ===========================================
 
@@ -8,80 +9,106 @@ import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
 import 'package:shoplyapp/features/AUTH/presentation/pages/loginpage.dart';
 import 'package:shoplyapp/features/AUTH/presentation/pages/password_recovery_page.dart';
 import 'package:shoplyapp/features/AUTH/presentation/pages/registerpage.dart';
+import 'package:shoplyapp/features/INTRO/presentation/pages/on_boarding1.dart';
+import 'package:shoplyapp/features/INTRO/presentation/pages/on_boarding2.dart';
+import 'package:shoplyapp/features/INTRO/presentation/pages/splash_screen.dart';
+import 'package:shoplyapp/features/INTRO/presentation/pages/welcome_page.dart';
+
 //============================================
 
 class AppRouter {
-  // == =========   THIS CODE BLOC IS TO MAKE THE USER LOGGED IN TO THE APP WHEN THEY CLOSES IT AND COME BACK 
-  // UNCOMMENT IT WHEN U'RE READY TO USE THIS FEATURE
-  // intructions : please replace the router function bellow all these comment with the router function commented 
+  final AuthBloc authBloc;
 
+  AppRouter(this.authBloc);
 
-  // late final GoRouter router = GoRouter(
-  //   initialLocation: '/login',
-  //   debugLogDiagnostics: true,
+  late final GoRouter router = GoRouter(
+    initialLocation: '/splash', // 1. Always start at Splash
+    debugLogDiagnostics: true,
     
-  //   // 1. LISTEN TO BLOC: This refreshes the route every time AuthState changes
-  //   refreshListenable: GoRouterRefreshStream(authBloc.stream),
+    // 2. LISTEN TO BLOC: Refreshes route when AuthState changes
+    refreshListenable: GoRouterRefreshStream(authBloc.stream),
 
-  //   // 2. REDIRECT LOGIC: This runs on every refresh
-  //   redirect: (context, state) {
-  //     final authState = authBloc.state;
+    // 3. REDIRECT LOGIC: Guard the routes
+    redirect: (context, state) {
+      final authState = authBloc.state;
       
-  //     // Are we logged in? (Check both Authenticated and Success states)
-  //     final isLoggedIn = authState is AuthAuthenticated || authState is AuthSuccess;
+      // -- CHECK AUTH STATUS --
+      // We check for AuthSuccess because that's what we emit on login
+      final isLoggedIn = authState is AuthSuccess || authState is AuthAuthenticated;
 
-  //     // Where are we trying to go?
-  //     final isLoggingIn = state.uri.toString() == '/login';
-  //     final isRegistering = state.uri.toString() == '/register';
-  //     final isRecovering = state.uri.toString() == '/forgot-password';
+      final isLoggingIn = state.uri.toString() == '/login';
+      final isRegistering = state.uri.toString() == '/register';
+      final isRecovering = state.uri.toString() == '/forgot-password';
+      final isSplash = state.uri.toString() == '/splash';
+      final isOnboarding = state.uri.toString() == '/onboarding';
+      final isWelcome = state.uri.toString() == '/welcome';
 
-  //     // SCENARIO A: Not logged in, but trying to access a private page
-  //     if (!isLoggedIn && !isLoggingIn && !isRegistering && !isRecovering) {
-  //       return '/login';
-  //     }
+      // -- RULE A: If Logged In, go to Home --
+      // (Unless we are already at home)
+      if (isLoggedIn) {
+        // If user is trying to login/register or is at splash, send to home
+        if (isLoggingIn || isRegistering || isRecovering || isSplash || isOnboarding || isWelcome) {
+          return '/home';
+        }
+      }
 
-  //     // SCENARIO B: Logged in, but trying to access login/register pages
-  //     if (isLoggedIn && (isLoggingIn || isRegistering || isRecovering)) {
-  //       return '/home';
-  //     }
+      // -- RULE B: If Not Logged In --
+      // We don't need to force them to login here, because the Splash Screen 
+      // will handle the decision (Onboarding vs Welcome vs Login).
+      // So we return null to let the navigation proceed as normal.
+      return null;
+    },
 
-  //     // SCENARIO C: Everything is fine, don't interfere
-  //     return null;
-  //   },
-
-
-
-  
-  //================================================ 
-
-  static final GoRouter router = GoRouter(
-    initialLocation: '/login', // Start at Login
     routes: [
-      // --- Auth Routes ---
-      
-      // 1. Login Page
+      // --- SPLASH SCREEN ---
       GoRoute(
-        path: '/login',
-        name: 'login', // Adding names makes navigation easier/safer
-        builder: (context, state) => const LoginPage(),
+        path: '/splash',
+        name: 'splash',
+        builder: (context, state) => const ShoplySplashScreen(),
       ),
 
-      // 2. Register Page
+      // --- ONBOARDING SCREEN 1 ---
+      GoRoute(
+        path: '/onboarding1',
+        name: 'onboarding1',
+        // Replace with your First Onboarding Page widget
+        builder: (context, state) => const OnBoarding1(), 
+      ),
+
+      // --- ONBOARDING SCREEN 2 ---
+      GoRoute(
+        path: '/onboarding2',
+        name: 'onboarding2',
+        // Replace with your First Onboarding Page widget
+        builder: (context, state) => const OnBoarding2(), 
+      ),
+
+
+      // --- WELCOME SCREEN ---
+      GoRoute(
+        path: '/welcome',
+        name: 'welcome',
+        builder: (context, state) => const WelcomePage(), 
+      ),
+
+      // --- AUTH ROUTES ---
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginPage(),
+      ),
       GoRoute(
         path: '/register',
         name: 'register',
         builder: (context, state) => const RegisterPage(),
       ),
-
-      // 3. Password Recovery Page
-      // (Handles email entry & shows the "Check Email" dialog)
       GoRoute(
         path: '/forgot-password',
         name: 'forgot-password',
         builder: (context, state) => const PasswordRecoveryPage(),
       ),
       
-      // --- Home Route (Placeholder) ---
+      // --- HOME SCREEN ---
       GoRoute(
         path: '/home',
         name: 'home',
@@ -90,16 +117,6 @@ class AppRouter {
         ),
       ),
     ],
-    
-    // Optional: Add a redirect logic here if you want to 
-    // auto-redirect users who are already logged in.
-    /*
-    redirect: (context, state) {
-      // You would check your Bloc state here
-      return null; 
-    },
-    */
   );
-
-  AppRouter(AuthBloc authBloc);
 }
+

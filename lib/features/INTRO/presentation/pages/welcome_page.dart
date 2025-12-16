@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shoplyapp/core/common_widgets/shoply_text&logo.dart';
 import 'package:shoplyapp/core/common_widgets/submit_like_button.dart';
@@ -20,7 +21,7 @@ class WelcomePage extends StatelessWidget {
             children: [
               ShoplyTextlogo(),
 
-              Image.asset('lib/assets/images/girl_shopping_alone.png'),
+              Image.asset('assets/images/girl_shopping_alone.png'),
 
               Text(
                 'Let’s explore Shoply',
@@ -37,11 +38,8 @@ class WelcomePage extends StatelessWidget {
                   Expanded(
                     child: SubmitLikeButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
-                          ),
-                        );
+                        // -- I used context.pushNamed('login') because in your AppRouter you defined the route with name: 'login'. This is safer than typing the path strings manually every time! --
+                        context.pushNamed('login');
                       },
                       title: 'Sign in',
                     ),
@@ -50,11 +48,9 @@ class WelcomePage extends StatelessWidget {
                   Expanded(
                     child: submitLikeButtonWhite(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterPage(),
-                          ),
-                        );
+                        // -- I used context.pushNamed('login') because in your AppRouter you defined the route with name: 'login'. This is safer than typing the path strings manually every time! --
+                        context.pushNamed('register');
+                        
                       },
                       title: 'Sign up',
                     ),

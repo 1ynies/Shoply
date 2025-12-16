@@ -1,21 +1,23 @@
 // == PACKAGES IMPORTS =======================
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart'; 
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:io'; // <--- NEW: Required to check if Platform.isAndroid
+import 'package:android_intent_plus/android_intent.dart'; // <--- NEW: For opening Android Email App
+import 'package:android_intent_plus/flag.dart';
 // ===========================================
 
 // == FILES IMPORTS ==========================
 import 'package:shoplyapp/features/AUTH/presentation/pages/loginpage.dart';
-// UPDATED IMPORT
 import 'package:shoplyapp/core/common_widgets/round_navigation_button.dart';
 import 'package:shoplyapp/core/common_widgets/submit_like_button.dart';
 import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
 import 'package:shoplyapp/features/AUTH/presentation/widgets/auth_textfield.dart';
 import 'package:shoplyapp/features/AUTH/presentation/widgets/round_circle%20_with_lock_inside.dart';
 // ===========================================
-
-
 
 class PasswordRecoveryPage extends StatefulWidget {
   const PasswordRecoveryPage({super.key});
@@ -25,6 +27,8 @@ class PasswordRecoveryPage extends StatefulWidget {
 }
 
 class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
+  // -- FORM KEY --
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
 
   @override
@@ -44,123 +48,154 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
             _showCheckEmailDialog(context);
           }
           if (state is AuthError) {
-             ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-             );
+            // -- UPGRADED SNACKBAR --
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  // state.message.isNotEmpty
+                      // ? 
+                      state.message
+                      // : 'There might have been a problem, please try again'
+                      ,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.red.shade400,
+                behavior: SnackBarBehavior.floating,
+                margin: const EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            );
           }
         },
         child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // --- Header ---
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                     RoundNavigationButton(
-                      onTap: () => Navigator.of(context).pop(),
-                      Iconpath: 'assets/svg/arrow_left.svg',
-                      iconwidth: 24,
-                      iconheight: 24,
-                    ),
-                  ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // --- HEADER ---
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RoundNavigationButton(
+                        onTap: () => Navigator.of(context).pop(),
+                        Iconpath: 'assets/svg/arrow_left.svg',
+                        iconwidth: 24,
+                        iconheight: 24,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              // --- Content ---
-              Column(
-                children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        const RoundCircleWithLockInside(),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Password recovery',
-                          style: GoogleFonts.manrope(
-                            textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+                // --- TEXT & TEXT FIELD ---
+                Center(
+                  child: Column(
+                    children: [
+                      const RoundCircleWithLockInside(),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Password recovery',
+                        style: GoogleFonts.manrope(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                            'Enter your email to recover your password',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.manrope(
-                              textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                      ),
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          'Enter your email to recover your password',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.manrope(
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-                          child: AuthTextfield(
-                            controller: _emailController,
-                            autofocus: true,
-                            label: 'Enter your email',
-                            prefixicon: 'assets/svg/envelope.svg',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              // --- Button ---
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          if (state is AuthLoading) {
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                          return SubmitLikeButton(
-                            onPressed: () {
-                               if (_emailController.text.trim().isEmpty) {
-                                 ScaffoldMessenger.of(context).showSnackBar(
-                                   const SnackBar(content: Text("Please enter your email")),
-                                 );
-                                 return;
-                               }
-                               // Trigger Bloc Event
-                               context.read<AuthBloc>().add(
-                                 AuthResetPasswordEvent(_emailController.text.trim())
-                               );
-                            },
-                            title: 'Recover password',
-                          );
-                        },
                       ),
-                    ),
-                  ],
+                      // -- EMAIL TEXT FIELD -- 
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          top: 20,
+                        ),
+                        child: AuthTextfield(
+                          controller: _emailController,
+                          autofocus: true,
+                          label: 'Enter your email',
+                          prefixicon: 'assets/svg/envelope.svg',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Enter your email to recover password';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+
+                // --- RECOVER PASSWORD BUTTON ---
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                            
+                            return SubmitLikeButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  HapticFeedback.mediumImpact();
+                                  // Trigger Bloc Event
+                                  context.read<AuthBloc>().add(
+                                    AuthResetPasswordEvent(
+                                      _emailController.text.trim(),
+                                    ),
+                                  );
+                                }
+                              },
+                              title: 'Recover password',
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  // --- Widget Function for Alert Dialog ---
+  // --- ALERT DIALOG  ---
   void _showCheckEmailDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: false, // User must interact with buttons
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: const Column(
             children: [
-              Icon(Icons.mark_email_read, size: 50, color: Color(0xFFADF50F)),
-              SizedBox(height: 10),
+              Icon(Icons.mark_email_read, size: 50, color: Color(0xFf9AE600)),
+              const Gap(10),
               Text("Check your email", textAlign: TextAlign.center),
             ],
           ),
@@ -170,54 +205,80 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
             style: GoogleFonts.manrope(fontSize: 14),
           ),
           actionsAlignment: MainAxisAlignment.center,
-          actionsOverflowDirection: VerticalDirection.down, 
+          actionsOverflowDirection: VerticalDirection.down,
           actions: [
-            // 1. Open Email App Button (UPDATED to use url_launcher)
+            // 1. Open Email App Button 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFADF50F),
+                backgroundColor: const Color(0xFF9AE600),
                 foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                minimumSize: const Size(double.infinity, 45), 
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                minimumSize: const Size(double.infinity, 45),
               ),
-              onPressed: () async {
-                // Creates a 'mailto:' URI which the OS handles by opening the default email app
-                final Uri emailLaunchUri = Uri(
-                  scheme: 'mailto',
-                  path: '', 
-                );
 
+              onPressed: () async {
                 try {
-                  if (await canLaunchUrl(emailLaunchUri)) {
-                    await launchUrl(emailLaunchUri);
-                  } else {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Could not launch email app")),
+                  if (Platform.isAndroid) {
+                    // ANDROID: Opens the specific "Inbox" activity
+                    const intent = AndroidIntent(
+                      action: 'android.intent.action.MAIN',
+                      category: 'android.intent.category.APP_EMAIL',
+                      flags: [Flag.FLAG_ACTIVITY_NEW_TASK],
+                    );
+                    await intent.launch();
+                  } else if (Platform.isIOS) {
+                    // Try to open Apple Mail App specifically (Inbox view)
+                    final Uri mailUrl = Uri.parse("message://");
+
+                    if (await canLaunchUrl(mailUrl)) {
+                      await launchUrl(mailUrl);
+                    } else {
+                      //  Fallback: If they deleted Apple Mail, open their default email app (Gmail/Outlook)
+                      final Uri emailLaunchUri = Uri(scheme: 'mailto');
+                      await launchUrl(
+                        emailLaunchUri,
+                        mode: LaunchMode.externalApplication,
                       );
                     }
                   }
                 } catch (e) {
-                   if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Could not launch email app")),
-                      );
-                   }
+                  // -- SHOWS THE SNACKBAR WITH ERROR MESSAGE
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text("Could not launch email app"),
+                        backgroundColor: Colors.red.shade400,
+                        behavior: SnackBarBehavior.floating,
+                        margin: const EdgeInsets.all(30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    );
+                  }
                 }
               },
-              child: const Text("Open emails app"),
+
+              child: Text(
+                "Open emails app",
+                style: GoogleFonts.manrope(
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
+              ),
             ),
-            
+
             const SizedBox(height: 10),
 
-            // 2. Back to Login Button
+            // --  BACK TO LOGIN PAGE TEXT BUTTON -- 
             TextButton(
               onPressed: () {
                 // Navigate back to Login Page and clear stack
-                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (route) => false,
-                  );
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  (route) => false,
+                );
               },
               child: Text(
                 "Back to Login",

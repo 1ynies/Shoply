@@ -1,10 +1,15 @@
+// ===  PACKAGE IMPORTS ========================
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
+// =============================================
+
+// === FILE IMPORTS
 import 'package:shoplyapp/core/common_widgets/shoply_text&logo.dart';
 import 'package:shoplyapp/core/common_widgets/submit_like_button.dart';
-import 'package:shoplyapp/features/INTRO/presentation/pages/on_boarding2.dart';
 import 'package:shoplyapp/features/INTRO/presentation/widgets/onboarding_indicator_widget.dart';
-import 'package:flutter/services.dart';
+// =============================================
 
 // -- The StatefulWidget is used to hold and potentially modify the local state variables, like _currentStep , that determine the progress indicator's appearance. --
 
@@ -29,12 +34,10 @@ class _OnBoarding1State extends State<OnBoarding1> {
             // -- to Align the widget so they will take all the space available and leave equal spaces between them  --
             mainAxisAlignment: .spaceBetween,
             children: [
-              // -- pre-made widget --
-              ShoplyTextlogo(),
-              Image.asset(
-                'lib/assets/images/person_pushing_another_in_a_cart.png',
-              ),
-
+              const ShoplyTextlogo(),
+              // === IMAGE ===
+              Image.asset('assets/images/person_pushing_another_in_a_cart.png'),
+              // === ON BOARDING TEXT ===
               Column(
                 crossAxisAlignment: .start,
                 children: [
@@ -42,7 +45,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                     'New fashion collection',
                     textAlign: TextAlign.left,
                     style: GoogleFonts.manrope(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w400,
                       ),
@@ -52,7 +55,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                     textAlign: TextAlign.left,
                     text: TextSpan(
                       style: GoogleFonts.manrope(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
                           color: Colors.black,
@@ -61,21 +64,23 @@ class _OnBoarding1State extends State<OnBoarding1> {
                       children: <TextSpan>[
                         TextSpan(text: 'Shop smartly , Faster With'),
                         TextSpan(
-                          text: 'Shoply',
-                          style: TextStyle(color: Color(0xFF9AE600)),
+                          text: ' Shoply',
+                          style: const TextStyle(color: Color(0xFF9AE600)),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 30),
                   // -- This code instantiates the ProgressStepper widget, which visually represents the user's current position within the multi-step onboarding process, using the local state variables _totalSteps (total indicators needed) and _currentStep (which indicator is currently active). --
+                  // === PROGRESS STEPPER ===
                   ProgressStepper(
                     totalSteps: _totalSteps,
                     currentStep: _currentStep,
                   ),
                 ],
               ),
-              // -- this is the next button , put inside the row then expanded because the SubmitLikeButton have no width and i had to make it take all the width available horizentally --
+              // -- this is the next button , put inside the row then expanded because the SubmitLikeButton have no width and i had to make it take all the width available horizentally -
+              // == NEXT BUTTON ==
               Row(
                 children: [
                   Expanded(
@@ -84,11 +89,8 @@ class _OnBoarding1State extends State<OnBoarding1> {
                         // -- This line gives the user some feedback with slight vibration  --
                         HapticFeedback.lightImpact();
                         // -- Navigation to OnBoarding 2 --
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const OnBoarding2(),
-                          ),
-                        );
+
+                        context.go('/onboarding2');
                       },
                       title: 'Next',
                     ),

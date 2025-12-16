@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // Import Bloc
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart'; // Import GoRouter
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shoplyapp/features/INTRO/presentation/pages/on_boarding1.dart';
-import 'package:shoplyapp/features/INTRO/presentation/pages/on_boarding2.dart';
+import 'package:shoplyapp/core/di/injection_container.dart';
+import 'package:shoplyapp/features/AUTH/data/datasources/auth_local_data_source.dart.dart';
+import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
 
-// -- The ShoplySplashScreen needs to perform an action after a specific duration (2 seconds), which is the navigation to the onboarding screen. This behavior requires lifecycle management, which is only available in a StatefulWidget --
+ // Import your Service Locator (sl)
 
 class ShoplySplashScreen extends StatefulWidget {
   const ShoplySplashScreen({super.key});
@@ -14,25 +17,38 @@ class ShoplySplashScreen extends StatefulWidget {
   State<ShoplySplashScreen> createState() => _ShoplySplashScreenState();
 }
 
-class Onboardingpageview extends StatelessWidget {
-  const Onboardingpageview({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return PageView(children: [OnBoarding1(), OnBoarding2()]);
-  }
-}
-
 class _ShoplySplashScreenState extends State<ShoplySplashScreen> {
   @override
   void initState() {
     super.initState();
-    // -- This code snippet make sure that after 2 seconds , the navigation to OnBoarding1 screen will happen
-    Timer(const Duration(seconds: 2), () {
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => OnBoarding1()));
-    });
+    _checkAppFlow();
+  }
+
+  // == THE NEW SMART LOGIC ==
+  void _checkAppFlow() async {
+    // 1. Trigger Auth Check 
+    // (If logged in, AppRouter will instantly redirect to /home)
+    context.read<AuthBloc>().add(AuthCheckStatus());
+
+    // 2. Keep your 2-second delay for the animation
+    await Future.delayed(const Duration(seconds: 2));
+    
+    // Check if widget is still mounted before using context
+    if (!mounted) return;
+
+    // 3. Check if user has seen Onboarding before
+    final hasSeenOnboarding = await sl<AuthLocalDataSource>().isOnboardingSeen();
+
+    // 4. Navigate based on the flag
+    // Note: If the user IS logged in, the AppRouter would have already sent them to /home by now.
+    // If we are still here, it means they are NOT logged in.
+    if (hasSeenOnboarding) {
+      // User has seen intro before -> Go to Welcome Page (Login/Register buttons)
+      context.go('/welcome'); 
+    } else {
+      // First time user -> Go to Onboarding Sequence
+      context.go('/onboarding1');
+    }
   }
 
   @override
@@ -40,7 +56,7 @@ class _ShoplySplashScreenState extends State<ShoplySplashScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xffD8F999), Color(0xffCBF778), Color(0xFFBBF451)],
             stops: [0.18, 0.56, 1.0],
@@ -54,9 +70,10 @@ class _ShoplySplashScreenState extends State<ShoplySplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // -- Tha logo --
+              // -- The logo --
+              // Note: Ensure your path is correct (remove 'lib/' if defined in pubspec)
               SvgPicture.asset(
-                'lib/assets/svg/app_logo.svg',
+                'assets/svg/app_logo.svg', 
                 width: 70,
                 height: 88,
               ),
@@ -81,18 +98,13 @@ class _ShoplySplashScreenState extends State<ShoplySplashScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              // -- SizedBox to insure the spacing between the logo&text and the circular progress indicator --
+              // -- Spacing --
               const SizedBox(height: 200),
 
-              // -- The Loading Indicator : A simple circular progress indicator--
+              // -- The Loading Indicator --
               const CircularProgressIndicator(
-                //  The color of the filled-in progress arc
                 color: Color(0xFF192E03),
-
-                //  The color of the unfilled track/background ring
                 backgroundColor: Color(0xFFF7FEE7),
-
-                // Optional: Set the thickness
                 strokeWidth: 4.0,
               ),
             ],
