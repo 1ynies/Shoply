@@ -12,8 +12,8 @@ import 'package:android_intent_plus/flag.dart';
 
 // == FILES IMPORTS ==========================
 import 'package:shoplyapp/features/AUTH/presentation/pages/loginpage.dart';
-import 'package:shoplyapp/core/common_widgets/round_navigation_button.dart';
-import 'package:shoplyapp/core/common_widgets/submit_like_button.dart';
+import 'package:shoplyapp/core/Shared/presentation/Widgets/round_navigation_button.dart';
+import 'package:shoplyapp/core/Shared/presentation/Widgets/submit_like_button.dart';
 import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
 import 'package:shoplyapp/features/AUTH/presentation/widgets/auth_textfield.dart';
 import 'package:shoplyapp/features/AUTH/presentation/widgets/round_circle%20_with_lock_inside.dart';

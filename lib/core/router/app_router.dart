@@ -1,4 +1,5 @@
 // == PACKAGES IMPORTS =======================
+import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:shoplyapp/core/router/go_router_refrech_stream.dart';
@@ -13,6 +14,9 @@ import 'package:shoplyapp/features/INTRO/presentation/pages/on_boarding1.dart';
 import 'package:shoplyapp/features/INTRO/presentation/pages/on_boarding2.dart';
 import 'package:shoplyapp/features/INTRO/presentation/pages/splash_screen.dart';
 import 'package:shoplyapp/features/INTRO/presentation/pages/welcome_page.dart';
+import 'package:shoplyapp/features/PRODUCT/presentation/bloc/product_bloc.dart';
+import 'package:shoplyapp/features/PRODUCT/presentation/bloc/product_event.dart';
+import 'package:shoplyapp/features/PRODUCT/presentation/pages/product_details.dart';
 
 //============================================
 
@@ -22,6 +26,8 @@ class AppRouter {
   AppRouter(this.authBloc);
 
   late final GoRouter router = GoRouter(
+    
+
     initialLocation: '/splash', // 1. Always start at Splash
     debugLogDiagnostics: true,
     
@@ -60,6 +66,8 @@ class AppRouter {
     },
 
     routes: [
+
+      
       // --- SPLASH SCREEN ---
       GoRoute(
         path: '/splash',
@@ -116,6 +124,8 @@ class AppRouter {
           body: Center(child: Text("Welcome Home!")),
         ),
       ),
+
+      
     ],
   );
 }

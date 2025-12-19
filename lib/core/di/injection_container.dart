@@ -17,6 +17,10 @@ import 'package:shoplyapp/features/AUTH/domain/usecases/SignInWithGoogleUseCase.
 import 'package:shoplyapp/features/AUTH/domain/usecases/SignOutUseCase.dart';
 import 'package:shoplyapp/features/AUTH/domain/usecases/SignUpWithEmailUseCase.dart';
 import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
+import 'package:shoplyapp/features/PRODUCT/data/repositories/product_repository_impl.dart';
+import 'package:shoplyapp/features/PRODUCT/domain/repositories/product_repository.dart';
+import 'package:shoplyapp/features/PRODUCT/domain/usecases/get_product_usecase.dart';
+import 'package:shoplyapp/features/PRODUCT/presentation/bloc/product_bloc.dart';
 //============================================
 
 final sl = GetIt.instance;
@@ -32,8 +36,7 @@ Future<void> initDependencies() async {
 
   // 2. Data Sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(sl(),sl()),
-
+    () => AuthRemoteDataSourceImpl(sl(), sl()),
   );
 
   // -- NEW: REGISTER LOCAL DATA SOURCE --
@@ -45,7 +48,7 @@ Future<void> initDependencies() async {
   // -- UPDATE: Inject BOTH remote and local data sources --
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
-      remoteDataSource: sl(), 
+      remoteDataSource: sl(),
       localDataSource: sl(), // Add this line!
     ),
   );
@@ -69,5 +72,20 @@ Future<void> initDependencies() async {
       signOutUseCase: sl(),
       getAuthStatusUseCase: sl(),
     ),
+  );
+
+  // == DUMMY DATA FOR TESTING TO BE REMOVED === 
+  sl.registerLazySingleton<ProductRepository>(
+    () =>
+        ProductRepositoryImpl(), // Remove the sl() inside the brackets for now
+  );
+
+  //====================================================
+  // Use Case
+  sl.registerLazySingleton(() => GetProductDetails(sl()));
+
+  // Bloc: Use registerFactory
+  sl.registerFactory(
+    () => ProductBloc(getProductDetailsUseCase: sl()),
   );
 }

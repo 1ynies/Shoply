@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shoplyapp/core/common_widgets/shoply_text&logo.dart';
-import 'package:shoplyapp/core/common_widgets/submit_like_button.dart';
+import 'package:shoplyapp/core/Shared/presentation/Widgets/shoply_text&logo.dart';
+import 'package:shoplyapp/core/Shared/presentation/Widgets/submit_like_button.dart';
 import 'package:shoplyapp/features/AUTH/presentation/pages/loginpage.dart';
 import 'package:shoplyapp/features/AUTH/presentation/pages/registerpage.dart';
 

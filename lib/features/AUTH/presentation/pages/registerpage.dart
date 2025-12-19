@@ -8,8 +8,8 @@ import 'package:flutter/services.dart';
 // ===========================================
 
 // == FILES IMPORTS ==========================
-import 'package:shoplyapp/core/common_widgets/shoply_text&logo.dart';
-import 'package:shoplyapp/core/common_widgets/submit_like_button.dart';
+import 'package:shoplyapp/core/Shared/presentation/Widgets/shoply_text&logo.dart';
+import 'package:shoplyapp/core/Shared/presentation/Widgets/submit_like_button.dart';
 import 'package:shoplyapp/features/AUTH/presentation/bloc/auth_bloc.dart';
 import 'package:shoplyapp/features/AUTH/presentation/pages/loginpage.dart';
 import 'package:shoplyapp/features/AUTH/presentation/widgets/Sign_in_with_google_button.dart';
