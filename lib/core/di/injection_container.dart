@@ -21,6 +21,7 @@ import 'package:shoplyapp/features/PRODUCT/data/repositories/product_repository_
 import 'package:shoplyapp/features/PRODUCT/domain/repositories/product_repository.dart';
 import 'package:shoplyapp/features/PRODUCT/domain/usecases/get_product_usecase.dart';
 import 'package:shoplyapp/features/PRODUCT/presentation/bloc/product_bloc.dart';
+
 //============================================
 
 final sl = GetIt.instance;

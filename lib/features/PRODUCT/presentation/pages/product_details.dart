@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import '../bloc/product_bloc.dart';
 import '../bloc/product_event.dart';
 import '../bloc/product_state.dart';
+import 'package:google_fonts/google_fonts.dart';
 
- // TODO : change the the sizedbox with gap 
- // TODO : 
+
 
 class ProductDetailsPage extends StatelessWidget {
   final String productId;
@@ -26,16 +27,15 @@ class ProductDetailsPage extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Product details",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_horiz, color: Colors.black),
-            onPressed: () {},
+          style: GoogleFonts.manrope(
+            textStyle: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ],
+        ),
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
@@ -86,7 +86,11 @@ class ProductDetailsPage extends StatelessWidget {
     final selectedIndex = state.selectedImageIndex;
 
     // Safety check if no images exist
-    if (images.isEmpty) return const SizedBox(height: 200, child: Center(child: Text("No images")));
+    if (images.isEmpty)
+      return const SizedBox(
+        height: 200,
+        child: Center(child: Text("No images")),
+      );
 
     return Column(
       children: [
@@ -105,10 +109,10 @@ class ProductDetailsPage extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        
+
         // B. Thumbnails Row
         SizedBox(
-          height: 70,
+          height: 90,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: images.length,
@@ -157,7 +161,7 @@ class ProductDetailsPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 5),
+        const Gap(5),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +170,10 @@ class ProductDetailsPage extends StatelessWidget {
             Expanded(
               child: Text(
                 product.name,
-                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             // Favorite Toggle
@@ -181,7 +188,7 @@ class ProductDetailsPage extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        const Gap(10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -192,16 +199,16 @@ class ProductDetailsPage extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.star, color: Colors.amber, size: 20),
-                const SizedBox(width: 4),
+                const Gap(4),
                 Text(
                   product.averageRating.toString(),
                   style: const TextStyle(fontWeight: FontWeight.bold),
-                )
+                ),
               ],
-            )
+            ),
           ],
         ),
-        const SizedBox(height: 15),
+        const Gap(15),
         Text(
           product.description,
           style: TextStyle(color: Colors.grey[600], height: 1.4),
@@ -224,7 +231,8 @@ class ProductDetailsPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final isSelected = state.selectedSize == sizes[index];
           return GestureDetector(
-            onTap: () => context.read<ProductBloc>().add(SelectSizeEvent(sizes[index])),
+            onTap: () =>
+                context.read<ProductBloc>().add(SelectSizeEvent(sizes[index])),
             child: Container(
               width: 50,
               alignment: Alignment.center,
@@ -254,27 +262,35 @@ class ProductDetailsPage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("Buy item :", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text(
+              "Buy item :",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             Row(
               children: [
                 _quantityButton(
                   icon: Icons.remove,
-                  onTap: () => context.read<ProductBloc>().add(UpdateQuantityEvent(-1)),
+                  onTap: () =>
+                      context.read<ProductBloc>().add(UpdateQuantityEvent(-1)),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
                     state.quantity.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
                 _quantityButton(
                   icon: Icons.add,
                   isDark: true,
-                  onTap: () => context.read<ProductBloc>().add(UpdateQuantityEvent(1)),
+                  onTap: () =>
+                      context.read<ProductBloc>().add(UpdateQuantityEvent(1)),
                 ),
               ],
-            )
+            ),
           ],
         ),
         const SizedBox(height: 20),
@@ -288,7 +304,7 @@ class ProductDetailsPage extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey[300]!)
+                    border: Border.all(color: Colors.grey[300]!),
                   ),
                   child: const Icon(Icons.shopping_cart_outlined),
                 ),
@@ -299,11 +315,17 @@ class ProductDetailsPage extends StatelessWidget {
                     padding: const EdgeInsets.all(5),
                     decoration: const BoxDecoration(
                       color: Color(0xFFAEDC81),
-                      shape: BoxShape.circle
+                      shape: BoxShape.circle,
                     ),
-                    child: const Text("1", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                    child: const Text(
+                      "1",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                )
+                ),
               ],
             ),
             const SizedBox(width: 20),
@@ -317,19 +339,28 @@ class ProductDetailsPage extends StatelessWidget {
                   backgroundColor: Colors.grey[300],
                   foregroundColor: Colors.grey[700],
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                   elevation: 0,
                 ),
-                child: const Text("Buy now", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text(
+                  "Buy now",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }
 
-  Widget _quantityButton({required IconData icon, required VoidCallback onTap, bool isDark = false}) {
+  Widget _quantityButton({
+    required IconData icon,
+    required VoidCallback onTap,
+    bool isDark = false,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
@@ -339,7 +370,11 @@ class ProductDetailsPage extends StatelessWidget {
           color: isDark ? const Color(0xFF283e1e) : Colors.grey[200],
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: isDark ? Colors.white : Colors.black, size: 20),
+        child: Icon(
+          icon,
+          color: isDark ? Colors.white : Colors.black,
+          size: 20,
+        ),
       ),
     );
   }

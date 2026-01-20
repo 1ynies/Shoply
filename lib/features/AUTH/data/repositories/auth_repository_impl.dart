@@ -29,7 +29,6 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   // ==== REGISTER WITH EMAIL FUNCTION ====
-  // Removed 'rememberMe' to match the fixed Interface
   @override
   Future<UserEntity> signUpWithEmail({
     required String fullName,

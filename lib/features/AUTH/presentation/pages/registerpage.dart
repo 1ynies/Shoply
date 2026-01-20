@@ -219,14 +219,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                       if (_formKey.currentState!.validate()) {
                                         HapticFeedback.mediumImpact();
                                         
-                                        // // Extra check just in case
-                                        // if (_passwordController.text != _rePasswordController.text) {
-                                        //   ScaffoldMessenger.of(context).showSnackBar(
-                                        //     const SnackBar(content: Text("Passwords do not match")),
-                                        //   );
-                                        //   return;
-                                        // }
-
                                         context.read<AuthBloc>().add(
                                           AuthRegisterEvent(
                                             fullName: _nameController.text.trim(),
